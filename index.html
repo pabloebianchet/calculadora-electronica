@@ -1,297 +1,322 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculadora Electrónica Completa</title>
-    <style>
-      :root {
-        --bg1: #0f2027;
-        --bg2: #203a43;
-        --bg3: #2c5364;
-        --accent: #00ff9d;
-        --text: #e8f1f2;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Electrónica Completa</title>
+  <style>
+    :root {
+      --bg1: #0f2027;
+      --bg2: #203a43;
+      --bg3: #2c5364;
+      --accent: #00ff9d;
+      --text: #e8f1f2;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+    }
+
+    h1 {
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent);
+      text-align: center;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+    }
+
+    .calculator {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+      padding: 1.5rem;
+      max-width: 700px;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    .tab {
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      color: var(--text);
+      transition: 0.3s;
+      font-size: 0.9rem;
+      border-radius: 6px;
+    }
+
+    .tab.active {
+      border-bottom: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .section {
+      display: none;
+      margin-top: 1.2rem;
+    }
+    .section.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-top: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    button {
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #00cc7a;
+    }
+
+    .result {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: 500;
+      word-wrap: break-word;
+    }
+
+    /* --- Responsive ajustes --- */
+    @media (max-width: 600px) {
       body {
-        font-family: "Poppins", sans-serif;
-        background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-        min-height: 100vh;
-        margin: 0;
-        color: var(--text);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem;
-      }
-
-      h1 {
-        color: var(--accent);
-        text-shadow: 0 0 8px var(--accent);
+        padding: 1rem;
       }
 
       .calculator {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(8px);
-        border-radius: 20px;
-        box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
-        padding: 2rem;
-        max-width: 700px;
-        width: 100%;
-        margin-top: 1rem;
-      }
-
-      .tabs {
-        display: flex;
-        justify-content: space-around;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem;
       }
 
       .tab {
-        padding: 0.8rem 1.5rem;
-        cursor: pointer;
-        color: var(--text);
-        transition: 0.3s;
-      }
-
-      .tab.active {
-        border-bottom: 3px solid var(--accent);
-        color: var(--accent);
-        font-weight: bold;
-      }
-
-      .section {
-        display: none;
-        margin-top: 1.5rem;
-      }
-      .section.active {
-        display: block;
-      }
-
-      label {
-        display: block;
-        margin-top: 0.6rem;
-      }
-
-      input,
-      select {
-        width: 100%;
-        padding: 0.6rem;
-        margin-top: 0.3rem;
-        border-radius: 6px;
-        border: none;
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--text);
-        font-size: 1rem;
-      }
-
-      button {
-        background: var(--accent);
-        border: none;
-        border-radius: 6px;
-        color: #000;
-        font-weight: bold;
-        padding: 0.8rem;
-        margin-top: 1rem;
-        cursor: pointer;
-        transition: 0.2s;
-        width: 100%;
-      }
-      button:hover {
-        background: #00cc7a;
-      }
-
-      .result {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 8px;
-        padding: 1rem;
+        flex: 1 1 45%;
         text-align: center;
-        margin-top: 1rem;
-        font-weight: 500;
+        padding: 0.5rem;
+        font-size: 0.85rem;
       }
-    </style>
-  </head>
-  <body>
-    <h1>⚙️ Calculadora Electrónica Completa</h1>
-    <div class="calculator">
-      <div class="tabs">
-        <div class="tab active" data-target="ohm">Ley de Ohm</div>
-        <div class="tab" data-target="potencia">Potencia</div>
-        <div class="tab" data-target="divisor">Divisor</div>
-        <div class="tab" data-target="resistencias">Resistencias</div>
-        <div class="tab" data-target="transistor">Transistor</div>
-      </div>
 
-      <!-- LEY DE OHM -->
-      <div id="ohm" class="section active">
-        <label>Qué querés calcular:</label>
-        <select id="tipoOhm">
-          <option value="V">Voltaje (V)</option>
-          <option value="I">Corriente (I)</option>
-          <option value="R">Resistencia (R)</option>
-        </select>
-        <input type="number" id="ohmA" placeholder="Valor 1" />
-        <input type="number" id="ohmB" placeholder="Valor 2" />
-        <button onclick="calcOhm()">Calcular</button>
-        <div class="result" id="resOhm"></div>
-      </div>
-
-      <!-- POTENCIA -->
-      <div id="potencia" class="section">
-        <label>Seleccioná fórmula:</label>
-        <select id="tipoP">
-          <option value="VI">P = V × I</option>
-          <option value="V2R">P = V² / R</option>
-          <option value="I2R">P = I² × R</option>
-        </select>
-        <input type="number" id="pA" placeholder="Valor 1" />
-        <input type="number" id="pB" placeholder="Valor 2" />
-        <button onclick="calcP()">Calcular Potencia</button>
-        <div class="result" id="resP"></div>
-      </div>
-
-      <!-- DIVISOR -->
-      <div id="divisor" class="section">
-        <label>Tipo de divisor:</label>
-        <select id="tipoDiv">
-          <option value="tension">Tensión</option>
-          <option value="corriente">Corriente</option>
-        </select>
-        <input type="number" id="vTotal" placeholder="Voltaje total (V)" />
-        <input type="number" id="r1" placeholder="R1 (Ω)" />
-        <input type="number" id="r2" placeholder="R2 (Ω)" />
-        <button onclick="calcDiv()">Calcular</button>
-        <div class="result" id="resDiv"></div>
-      </div>
-
-      <!-- RESISTENCIAS -->
-      <div id="resistencias" class="section">
-        <label>Tipo de conexión:</label>
-        <select id="tipoR">
-          <option value="serie">Serie</option>
-          <option value="paralelo">Paralelo</option>
-        </select>
-        <input type="text" id="valoresR" placeholder="Ej: 100,220,330" />
-        <button onclick="calcRes()">Calcular</button>
-        <div class="result" id="resR"></div>
-      </div>
-
-      <!-- TRANSISTOR -->
-      <div id="transistor" class="section">
-        <label for="beta">Ganancia β:</label>
-        <input type="number" id="beta" placeholder="Ej: 100" />
-        <label>Corriente de Base I<sub>B</sub> (mA):</label>
-        <input type="number" id="ib" placeholder="Ej: 2" />
-        <button onclick="calcTrans()">Calcular Corrientes</button>
-        <div class="result" id="resTrans"></div>
-      </div>
+      input, select, button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora Electrónica Completa</h1>
+  <div class="calculator">
+    <div class="tabs">
+      <div class="tab active" data-target="ohm">Ley de Ohm</div>
+      <div class="tab" data-target="potencia">Potencia</div>
+      <div class="tab" data-target="divisor">Divisor</div>
+      <div class="tab" data-target="resistencias">Resistencias</div>
+      <div class="tab" data-target="transistor">Transistor</div>
     </div>
 
-    <script>
-      const tabs = document.querySelectorAll(".tab");
-      const sections = document.querySelectorAll(".section");
-      tabs.forEach((t) => {
-        t.addEventListener("click", () => {
-          tabs.forEach((tab) => tab.classList.remove("active"));
-          t.classList.add("active");
-          const target = t.getAttribute("data-target");
-          sections.forEach((s) => s.classList.remove("active"));
-          document.getElementById(target).classList.add("active");
-        });
+    <!-- Ley de Ohm -->
+    <div id="ohm" class="section active">
+      <label>Qué querés calcular:</label>
+      <select id="tipoOhm">
+        <option value="V">Voltaje (V)</option>
+        <option value="I">Corriente (I)</option>
+        <option value="R">Resistencia (R)</option>
+      </select>
+      <input type="number" id="ohmA" placeholder="Valor 1" />
+      <input type="number" id="ohmB" placeholder="Valor 2" />
+      <button onclick="calcOhm()">Calcular</button>
+      <div class="result" id="resOhm"></div>
+    </div>
+
+    <!-- Potencia -->
+    <div id="potencia" class="section">
+      <label>Seleccioná fórmula:</label>
+      <select id="tipoP">
+        <option value="VI">P = V × I</option>
+        <option value="V2R">P = V² / R</option>
+        <option value="I2R">P = I² × R</option>
+      </select>
+      <input type="number" id="pA" placeholder="Valor 1" />
+      <input type="number" id="pB" placeholder="Valor 2" />
+      <button onclick="calcP()">Calcular Potencia</button>
+      <div class="result" id="resP"></div>
+    </div>
+
+    <!-- Divisor -->
+    <div id="divisor" class="section">
+      <label>Tipo de divisor:</label>
+      <select id="tipoDiv">
+        <option value="tension">Tensión</option>
+        <option value="corriente">Corriente</option>
+      </select>
+      <input type="number" id="vTotal" placeholder="Voltaje total (V)" />
+      <input type="number" id="r1" placeholder="R1 (Ω)" />
+      <input type="number" id="r2" placeholder="R2 (Ω)" />
+      <button onclick="calcDiv()">Calcular</button>
+      <div class="result" id="resDiv"></div>
+    </div>
+
+    <!-- Resistencias -->
+    <div id="resistencias" class="section">
+      <label>Tipo de conexión:</label>
+      <select id="tipoR">
+        <option value="serie">Serie</option>
+        <option value="paralelo">Paralelo</option>
+      </select>
+      <input type="text" id="valoresR" placeholder="Ej: 100,220,330" />
+      <button onclick="calcRes()">Calcular</button>
+      <div class="result" id="resR"></div>
+    </div>
+
+    <!-- Transistor -->
+    <div id="transistor" class="section">
+      <label for="beta">Ganancia β:</label>
+      <input type="number" id="beta" placeholder="Ej: 100" />
+      <label>Corriente de Base I<sub>B</sub> (mA):</label>
+      <input type="number" id="ib" placeholder="Ej: 2" />
+      <button onclick="calcTrans()">Calcular Corrientes</button>
+      <div class="result" id="resTrans"></div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const sections = document.querySelectorAll(".section");
+
+    tabs.forEach((t) => {
+      t.addEventListener("click", () => {
+        tabs.forEach((tab) => tab.classList.remove("active"));
+        t.classList.add("active");
+        const target = t.getAttribute("data-target");
+        sections.forEach((s) => s.classList.remove("active"));
+        document.getElementById(target).classList.add("active");
       });
+    });
 
-      function calcOhm() {
-        const tipo = document.getElementById("tipoOhm").value;
-        const a = parseFloat(document.getElementById("ohmA").value);
-        const b = parseFloat(document.getElementById("ohmB").value);
-        const res = document.getElementById("resOhm");
-        if (isNaN(a) || isNaN(b)) {
-          res.innerHTML = "⚠️ Ingresá valores válidos";
-          return;
-        }
-        let r = 0;
-        if (tipo === "V") {
-          r = a * b;
-          res.innerHTML = `Voltaje = ${r.toFixed(3)} V`;
-        } else if (tipo === "I") {
-          r = a / b;
-          res.innerHTML = `Corriente = ${r.toFixed(3)} A`;
-        } else {
-          r = a / b;
-          res.innerHTML = `Resistencia = ${r.toFixed(3)} Ω`;
-        }
-      }
+    function calcOhm() {
+      const tipo = document.getElementById("tipoOhm").value;
+      const a = parseFloat(document.getElementById("ohmA").value);
+      const b = parseFloat(document.getElementById("ohmB").value);
+      const res = document.getElementById("resOhm");
+      if (isNaN(a) || isNaN(b)) return (res.innerHTML = "Ingresá valores válidos");
+      let r = 0;
+      if (tipo === "V") r = a * b;
+      else if (tipo === "I") r = a / b;
+      else r = a / b;
+      res.innerHTML =
+        tipo === "V"
+          ? `Voltaje = ${r.toFixed(3)} V`
+          : tipo === "I"
+          ? `Corriente = ${r.toFixed(3)} A`
+          : `Resistencia = ${r.toFixed(3)} Ω`;
+    }
 
-      function calcP() {
-        const tipo = document.getElementById("tipoP").value;
-        const a = parseFloat(document.getElementById("pA").value);
-        const b = parseFloat(document.getElementById("pB").value);
-        const res = document.getElementById("resP");
-        if (isNaN(a) || isNaN(b)) {
-          res.innerHTML = "⚠️ Ingresá valores válidos";
-          return;
-        }
-        let p = 0;
-        if (tipo === "VI") p = a * b;
-        else if (tipo === "V2R") p = (a * a) / b;
-        else p = a * a * b;
-        res.innerHTML = `Potencia = ${p.toFixed(3)} W`;
-      }
+    function calcP() {
+      const tipo = document.getElementById("tipoP").value;
+      const a = parseFloat(document.getElementById("pA").value);
+      const b = parseFloat(document.getElementById("pB").value);
+      const res = document.getElementById("resP");
+      if (isNaN(a) || isNaN(b)) return (res.innerHTML = "Ingresá valores válidos");
+      let p = 0;
+      if (tipo === "VI") p = a * b;
+      else if (tipo === "V2R") p = (a * a) / b;
+      else p = a * a * b;
+      res.innerHTML = `Potencia = ${p.toFixed(3)} W`;
+    }
 
-      function calcDiv() {
-        const tipo = document.getElementById("tipoDiv").value;
-        const vt = parseFloat(document.getElementById("vTotal").value);
-        const r1 = parseFloat(document.getElementById("r1").value);
-        const r2 = parseFloat(document.getElementById("r2").value);
-        const res = document.getElementById("resDiv");
-        if (isNaN(vt) || isNaN(r1) || isNaN(r2)) {
-          res.innerHTML = "⚠️ Ingresá valores válidos";
-          return;
-        }
-        let v1, v2;
-        if (tipo === "tension") {
-          v1 = vt * (r1 / (r1 + r2));
-          v2 = vt * (r2 / (r1 + r2));
-          res.innerHTML = `V1 = ${v1.toFixed(3)} V<br>V2 = ${v2.toFixed(3)} V`;
-        } else {
-          const iTotal = vt / (r1 + r2);
-          const i1 = iTotal * (r2 / (r1 + r2));
-          const i2 = iTotal * (r1 / (r1 + r2));
-          res.innerHTML = `I1 = ${i1.toFixed(3)} A<br>I2 = ${i2.toFixed(3)} A`;
-        }
+    function calcDiv() {
+      const tipo = document.getElementById("tipoDiv").value;
+      const vt = parseFloat(document.getElementById("vTotal").value);
+      const r1 = parseFloat(document.getElementById("r1").value);
+      const r2 = parseFloat(document.getElementById("r2").value);
+      const res = document.getElementById("resDiv");
+      if (isNaN(vt) || isNaN(r1) || isNaN(r2))
+        return (res.innerHTML = "Ingresá valores válidos");
+      let v1, v2;
+      if (tipo === "tension") {
+        v1 = vt * (r1 / (r1 + r2));
+        v2 = vt * (r2 / (r1 + r2));
+        res.innerHTML = `V1 = ${v1.toFixed(3)} V<br>V2 = ${v2.toFixed(3)} V`;
+      } else {
+        const iTotal = vt / (r1 + r2);
+        const i1 = iTotal * (r2 / (r1 + r2));
+        const i2 = iTotal * (r1 / (r1 + r2));
+        res.innerHTML = `I1 = ${i1.toFixed(3)} A<br>I2 = ${i2.toFixed(3)} A`;
       }
+    }
 
-      function calcRes() {
-        const tipo = document.getElementById("tipoR").value;
-        const valores = document
-          .getElementById("valoresR")
-          .value.split(",")
-          .map(Number);
-        const res = document.getElementById("resR");
-        if (valores.some(isNaN)) {
-          res.innerHTML = "⚠️ Ingresá valores válidos (separados por coma)";
-          return;
-        }
-        let total = 0;
-        if (tipo === "serie") total = valores.reduce((a, b) => a + b, 0);
-        else total = 1 / valores.reduce((a, b) => a + 1 / b, 0);
-        res.innerHTML = `Resistencia Equivalente = ${total.toFixed(3)} Ω`;
-      }
+    function calcRes() {
+      const tipo = document.getElementById("tipoR").value;
+      const valores = document
+        .getElementById("valoresR")
+        .value.split(",")
+        .map(Number);
+      const res = document.getElementById("resR");
+      if (valores.some(isNaN))
+        return (res.innerHTML = "Ingresá valores válidos (separados por coma)");
+      let total = 0;
+      if (tipo === "serie") total = valores.reduce((a, b) => a + b, 0);
+      else total = 1 / valores.reduce((a, b) => a + 1 / b, 0);
+      res.innerHTML = `Resistencia Equivalente = ${total.toFixed(3)} Ω`;
+    }
 
-      function calcTrans() {
-        const beta = parseFloat(document.getElementById("beta").value);
-        const ib = parseFloat(document.getElementById("ib").value);
-        const res = document.getElementById("resTrans");
-        if (isNaN(beta) || isNaN(ib)) {
-          res.innerHTML = "⚠️ Ingresá valores válidos";
-          return;
-        }
-        const ic = beta * ib;
-        const ie = ic + ib;
-        res.innerHTML = `I<sub>C</sub> = ${ic.toFixed(
-          3
-        )} mA<br>I<sub>E</sub> = ${ie.toFixed(3)} mA`;
-      }
-    </script>
-  </body>
+    function calcTrans() {
+      const beta = parseFloat(document.getElementById("beta").value);
+      const ib = parseFloat(document.getElementById("ib").value);
+      const res = document.getElementById("resTrans");
+      if (isNaN(beta) || isNaN(ib))
+        return (res.innerHTML = "Ingresá valores válidos");
+      const ic = beta * ib;
+      const ie = ic + ib;
+      res.innerHTML = `I<sub>C</sub> = ${ic.toFixed(
+        3
+      )} mA<br>I<sub>E</sub> = ${ie.toFixed(3)} mA`;
+    }
+  </script>
+</body>
 </html>
+
