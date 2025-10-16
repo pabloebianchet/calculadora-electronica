@@ -26,8 +26,8 @@
         flex-direction: column;
         align-items: center;
         padding: 1.5rem;
-        height: auto; /* 👈 */
-        min-height: 0; /* 👈 elimina el alto forzado */
+        height: auto;
+        min-height: 0;
         background-attachment: fixed;
       }
 
@@ -126,23 +126,32 @@
         word-wrap: break-word;
       }
 
-      /* --- Responsive ajustes --- */
+      .band-row {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .band-row select {
+        flex: 1;
+        min-width: 90px;
+      }
+
       @media (max-width: 600px) {
         body {
           padding: 1rem;
         }
-
         .calculator {
           padding: 1rem;
         }
-
         .tab {
           flex: 1 1 45%;
           text-align: center;
           padding: 0.5rem;
           font-size: 0.85rem;
         }
-
         input,
         select,
         button {
@@ -159,7 +168,7 @@
         <div class="tab" data-target="potencia">Potencia</div>
         <div class="tab" data-target="divisor">Divisor</div>
         <div class="tab" data-target="resistencias">Resistencias</div>
-        <div class="tab" data-target="transistor">Transistor</div>
+        <div class="tab" data-target="colores">Código de Colores</div>
       </div>
 
       <!-- Ley de Ohm -->
@@ -167,8 +176,8 @@
         <label>Qué querés calcular:</label>
         <select id="tipoOhm">
           <option value="V">Voltaje (V)</option>
-          <option value="I">Corriente (I)</option>
-          <option value="R">Resistencia (R)</option>
+          <option value="I">Corriente (A)</option>
+          <option value="R">Resistencia (Ω)</option>
         </select>
         <input type="number" id="ohmA" placeholder="Valor 1" />
         <input type="number" id="ohmB" placeholder="Valor 2" />
@@ -216,14 +225,17 @@
         <div class="result" id="resR"></div>
       </div>
 
-      <!-- Transistor -->
-      <div id="transistor" class="section">
-        <label for="beta">Ganancia β:</label>
-        <input type="number" id="beta" placeholder="Ej: 100" />
-        <label>Corriente de Base I<sub>B</sub> (mA):</label>
-        <input type="number" id="ib" placeholder="Ej: 2" />
-        <button onclick="calcTrans()">Calcular Corrientes</button>
-        <div class="result" id="resTrans"></div>
+      <!-- Código de Colores -->
+      <div id="colores" class="section">
+        <label>Cantidad de bandas:</label>
+        <select id="numBandas" onchange="renderBandas()">
+          <option value="4">4 Bandas</option>
+          <option value="5">5 Bandas</option>
+          <option value="6">6 Bandas</option>
+        </select>
+        <div class="band-row" id="bandInputs"></div>
+        <button onclick="calcColor()">Calcular Valor</button>
+        <div class="result" id="resColor"></div>
       </div>
     </div>
 
@@ -311,18 +323,84 @@
         res.innerHTML = `Resistencia Equivalente = ${total.toFixed(3)} Ω`;
       }
 
-      function calcTrans() {
-        const beta = parseFloat(document.getElementById("beta").value);
-        const ib = parseFloat(document.getElementById("ib").value);
-        const res = document.getElementById("resTrans");
-        if (isNaN(beta) || isNaN(ib))
-          return (res.innerHTML = "Ingresá valores válidos");
-        const ic = beta * ib;
-        const ie = ic + ib;
-        res.innerHTML = `I<sub>C</sub> = ${ic.toFixed(
-          3
-        )} mA<br>I<sub>E</sub> = ${ie.toFixed(3)} mA`;
+      // === CÓDIGO DE COLORES ===
+      const colores = [
+        { nombre: "Negro", valor: 0, mult: 1, tol: null },
+        { nombre: "Marrón", valor: 1, mult: 10, tol: 1 },
+        { nombre: "Rojo", valor: 2, mult: 100, tol: 2 },
+        { nombre: "Naranja", valor: 3, mult: 1000, tol: null },
+        { nombre: "Amarillo", valor: 4, mult: 10000, tol: null },
+        { nombre: "Verde", valor: 5, mult: 100000, tol: 0.5 },
+        { nombre: "Azul", valor: 6, mult: 1000000, tol: 0.25 },
+        { nombre: "Violeta", valor: 7, mult: 10000000, tol: 0.1 },
+        { nombre: "Gris", valor: 8, mult: 100000000, tol: 0.05 },
+        { nombre: "Blanco", valor: 9, mult: 1000000000, tol: null },
+        { nombre: "Dorado", valor: null, mult: 0.1, tol: 5 },
+        { nombre: "Plateado", valor: null, mult: 0.01, tol: 10 },
+      ];
+
+      function renderBandas() {
+        const num = parseInt(document.getElementById("numBandas").value);
+        const container = document.getElementById("bandInputs");
+        container.innerHTML = "";
+
+        const labels =
+          num === 4
+            ? ["1ª", "2ª", "Multiplicador", "Tolerancia"]
+            : num === 5
+            ? ["1ª", "2ª", "3ª", "Multiplicador", "Tolerancia"]
+            : ["1ª", "2ª", "3ª", "Multiplicador", "Tolerancia", "Coef. Temp."];
+
+        labels.forEach((lab, i) => {
+          const sel = document.createElement("select");
+          sel.id = "banda" + i;
+          colores.forEach((c) => {
+            const opt = document.createElement("option");
+            opt.value = c.nombre;
+            opt.textContent = c.nombre;
+            sel.appendChild(opt);
+          });
+          container.appendChild(sel);
+        });
       }
+
+      function calcColor() {
+        const num = parseInt(document.getElementById("numBandas").value);
+        const res = document.getElementById("resColor");
+
+        const valores = [];
+        const seleccionados = [];
+        for (let i = 0; i < num; i++) {
+          seleccionados.push(document.getElementById("banda" + i).value);
+          const color = colores.find((c) => c.nombre === seleccionados[i]);
+          valores.push(color);
+        }
+
+        let resistencia = 0;
+        if (num === 4) {
+          const base = valores[0].valor * 10 + valores[1].valor;
+          resistencia = base * valores[2].mult;
+          res.innerHTML = `${resistencia.toLocaleString()} Ω ±${
+            valores[3].tol || 0
+          }%`;
+        } else if (num === 5) {
+          const base =
+            valores[0].valor * 100 + valores[1].valor * 10 + valores[2].valor;
+          resistencia = base * valores[3].mult;
+          res.innerHTML = `${resistencia.toLocaleString()} Ω ±${
+            valores[4].tol || 0
+          }%`;
+        } else {
+          const base =
+            valores[0].valor * 100 + valores[1].valor * 10 + valores[2].valor;
+          resistencia = base * valores[3].mult;
+          res.innerHTML = `${resistencia.toLocaleString()} Ω ±${
+            valores[4].tol || 0
+          }%`;
+        }
+      }
+
+      renderBandas();
     </script>
   </body>
 </html>
