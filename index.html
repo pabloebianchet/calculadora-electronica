@@ -171,90 +171,137 @@
       </div>
 
       <!-- Ley de Ohm -->
-      <div id="ohm" class="section active">
-        <label>Qué querés calcular:</label>
-        <select id="tipoOhm">
-          <option value="V">Voltaje (V)</option>
-          <option value="I">Corriente (A)</option>
-          <option value="R">Resistencia (Ω)</option>
-        </select>
-        <input type="number" id="ohmA" placeholder="Valor 1" />
-        <input type="number" id="ohmB" placeholder="Valor 2" />
-        <button onclick="calcOhm()">Calcular</button>
-        <div class="result" id="resOhm"></div>
-      </div>
+<div id="ohm" class="section active">
+  <label>Qué querés calcular:</label>
+  <select id="tipoOhm">
+    <option value="V">Voltaje (V)</option>
+    <option value="I">Corriente (A)</option>
+    <option value="R">Resistencia (Ω)</option>
+  </select>
+  <input type="number" id="ohmA" placeholder="Valor 1" />
+  <input type="number" id="ohmB" placeholder="Valor 2" />
+  <button onclick="calcOhm()">Calcular</button>
+  <div
+    id="img-ohm-container"
+    style="text-align: center; margin-top: 15px"
+  >
+    <img
+      id="img-ohm"
+      src="./calculadora-electronica/img/ohm.png"
+      alt="Diagrama Ley de Ohm"
+      style="max-width: 250px; width: 100%; filter: brightness(0.95)"
+    />
+  </div>
+  <div class="result" id="resOhm"></div>
+</div>
 
-      <!-- Potencia -->
-      <div id="potencia" class="section">
-        <label>Seleccioná fórmula:</label>
-        <select id="tipoP">
-          <option value="VI">P = V × I</option>
-          <option value="V2R">P = V² / R</option>
-          <option value="I2R">P = I² × R</option>
-        </select>
-        <input type="number" id="pA" placeholder="Valor 1" />
-        <input type="number" id="pB" placeholder="Valor 2" />
-        <button onclick="calcP()">Calcular Potencia</button>
-        <div class="result" id="resP"></div>
-      </div>
+<!-- Potencia -->
+<div id="potencia" class="section">
+  <label>Seleccioná fórmula:</label>
+  <select id="tipoP">
+    <option value="VI">P = V × I</option>
+    <option value="V2R">P = V² / R</option>
+    <option value="I2R">P = I² × R</option>
+  </select>
+  <input type="number" id="pA" placeholder="Valor 1" />
+  <input type="number" id="pB" placeholder="Valor 2" />
+  <button onclick="calcP()">Calcular Potencia</button>
+  <div
+    id="img-potencia-container"
+    style="text-align: center; margin-top: 15px"
+  >
+    <img
+      id="img-potencia"
+      src="./calculadora-electronica/img/potencia.png"
+      alt="Diagrama de Potencia Eléctrica"
+      style="max-width: 250px; width: 100%; filter: brightness(0.95)"
+    />
+  </div>
+  <div class="result" id="resP"></div>
+</div>
 
-      <!-- Divisor -->
-      <div id="divisor" class="section">
-        <label>Tipo de divisor:</label>
-        <select id="tipoDiv">
-          <option value="tension">Tensión</option>
-          <option value="corriente">Corriente</option>
-        </select>
-        <input type="number" id="vTotal" placeholder="Voltaje total (V)" />
-        <input type="number" id="r1" placeholder="R1 (Ω)" />
-        <input type="number" id="r2" placeholder="R2 (Ω)" />
-        <button onclick="calcDiv()">Calcular</button>
-        <div class="result" id="resDiv"></div>
-      </div>
+<!-- Divisor -->
+<div id="divisor" class="section">
+  <label>Tipo de divisor:</label>
+  <select id="tipoDiv">
+    <option value="tension">Tensión</option>
+    <option value="corriente">Corriente</option>
+  </select>
+  <input type="number" id="vTotal" placeholder="Voltaje total (V)" />
+  <input type="number" id="r1" placeholder="R1 (Ω)" />
+  <input type="number" id="r2" placeholder="R2 (Ω)" />
+  <button onclick="calcDiv()">Calcular</button>
+  <div
+    id="img-divisor-container"
+    style="text-align: center; margin-top: 15px"
+  >
+    <img
+      id="img-divisor"
+      src="./calculadora-electronica/img/divisor.png"
+      alt="Diagrama de Divisor de Tensión"
+      style="max-width: 250px; width: 100%; filter: brightness(0.95)"
+    />
+  </div>
+  <div class="result" id="resDiv"></div>
+</div>
 
-      <!-- Resistencias -->
-      <div id="resistencias" class="section">
-        <label>Tipo de conexión:</label>
-        <select id="tipoR">
-          <option value="serie">Serie</option>
-          <option value="paralelo">Paralelo</option>
-        </select>
-        <input type="text" id="valoresR" placeholder="Ej: 100,220,330" />
-        <button onclick="calcRes()">Calcular</button>
-        <div class="result" id="resR"></div>
-      </div>
+<!-- Resistencias -->
+<div id="resistencias" class="section">
+  <label>Tipo de conexión:</label>
+  <select id="tipoR">
+    <option value="serie">Serie</option>
+    <option value="paralelo">Paralelo</option>
+  </select>
+  <input type="text" id="valoresR" placeholder="Ej: 100,220,330" />
+  <button onclick="calcRes()">Calcular</button>
+  <div
+    id="img-resistencias-container"
+    style="text-align: center; margin-top: 15px"
+  >
+    <img
+      id="img-resistencias"
+      src="./calculadora-electronica/img/resistencia.png"
+      alt="Resistencias en Serie o Paralelo"
+      style="max-width: 250px; width: 100%; filter: brightness(0.95)"
+    />
+  </div>
+  <div class="result" id="resR"></div>
+</div>
 
-      <!-- Código de Colores -->
-      <div id="colores" class="section">
-        <label>Cantidad de bandas:</label>
-        <select id="numBandas" onchange="renderBandas()">
-          <option style="background-color: #e9ecf0; color: #000" value="4">
-            4 Bandas
-          </option>
-          <option style="background-color: #e9ecf0; color: #000" value="5">
-            5 Bandas
-          </option>
-          <option style="background-color: #e9ecf0; color: #000" value="6">
-            6 Bandas
-          </option>
-        </select>
-        <div
-          id="resistor-container"
-          style="text-align: center; margin-top: 15px"
-        >
-          <img
-            id="resistor-img"
-            src="imaagenBandas.png"
-            alt="Resistencia con bandas"
-            style="max-width: 250px; width: 100%; filter: brightness(0.95)"
-          />
-          <div id="band-overlay" style="position: relative; top: -100px"></div>
-        </div>
-        <div class="band-row" id="bandInputs"></div>
-        <button onclick="calcColor()">Calcular Valor</button>
-        <div class="result" id="resColor"></div>
-      </div>
-    </div>
+<!-- Código de Colores -->
+<div id="colores" class="section">
+  <label>Cantidad de bandas:</label>
+  <select id="numBandas" onchange="renderBandas()">
+    <option style="background-color: #e9ecf0; color: #000" value="4">
+      4 Bandas
+    </option>
+    <option style="background-color: #e9ecf0; color: #000" value="5">
+      5 Bandas
+    </option>
+    <option style="background-color: #e9ecf0; color: #000" value="6">
+      6 Bandas
+    </option>
+  </select>
+
+  
+  <div class="band-row" id="bandInputs"></div>
+  <button onclick="calcColor()">Calcular Valor</button>
+  <div
+    id="resistor-container"
+    style="text-align: center; margin-top: 15px"
+  >
+    <img
+      id="resistor-img"
+      src="./calculadora-electronica/img/bandas.png"
+      alt="Resistencia con bandas"
+      style="max-width: 250px; width: 100%; filter: brightness(0.95)"
+    />
+    <div id="band-overlay" style="position: relative; top: -100px"></div>
+  </div>
+  <div class="result" id="resColor"></div>
+  
+</div>
+
 
     <div style="text-align: center; margin-top: 20px">
       <a
