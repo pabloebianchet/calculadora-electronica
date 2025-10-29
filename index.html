@@ -565,5 +565,46 @@
 
       renderBandas();
     </script>
+
+<footer
+  style="
+    width: 100%;
+    margin-top: 40px;
+    padding: 20px 10px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ddd;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  "
+>
+  <p style="margin: 6px 0;">
+    CD Electrónica Argentina ® es una marca registrada. Todos los derechos reservados ©
+    <span id="year"></span>.
+  </p>
+  <p style="margin: 4px 0;">
+    Desarrollado con <span style="color: #e63946;">❤</span> por
+    <a
+      href="https://www.raccoonnow.com.ar"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        color: #80caff;
+        text-decoration: none;
+        font-weight: bold;
+      "
+      >Raccoon Now</a
+    >.
+  </p>
+</footer>
+
+<script>
+  // Mostrar automáticamente el año actual
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+
+
   </body>
 </html>
