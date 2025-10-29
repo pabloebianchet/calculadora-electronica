@@ -34,7 +34,7 @@
       h1 {
         color: white;
         text-align: center;
-        font-size: clamp(1.2rem, 4vw, 2rem);
+        font-size: clamp(0.7rem, 4vw, 1rem);
       }
 
       .calculator {
@@ -227,14 +227,35 @@
     <option value="tension">Tensión</option>
     <option value="corriente">Corriente</option>
   </select>
+
   <input type="number" id="vTotal" placeholder="Voltaje total (V)" />
-  <input type="number" id="r1" placeholder="R1 (Ω)" />
-  <input type="number" id="r2" placeholder="R2 (Ω)" />
-  <button onclick="calcDiv()">Calcular</button>
+
+  <!-- Agrupamos R1 y R2 en una fila -->
   <div
-    id="img-divisor-container"
-    style="text-align: center; margin-top: 15px"
+    style="
+      display: flex;
+      gap: 10px;
+      margin-top: 0.5rem;
+      width: 100%;
+    "
   >
+    <input
+      type="number"
+      id="r1"
+      placeholder="R1 (Ω)"
+      style="flex: 1;"
+    />
+    <input
+      type="number"
+      id="r2"
+      placeholder="R2 (Ω)"
+      style="flex: 1;"
+    />
+  </div>
+
+  <button onclick="calcDiv()">Calcular</button>
+
+  <div id="img-divisor-container" style="text-align: center; margin-top: 15px">
     <img
       id="img-divisor"
       src="./divisor.png"
@@ -242,8 +263,10 @@
       style="max-width: 250px; width: 100%; filter: brightness(0.95)"
     />
   </div>
+
   <div class="result" id="resDiv"></div>
 </div>
+
 
 <!-- Resistencias -->
 <div id="resistencias" class="section">
@@ -317,10 +340,29 @@
           text-decoration: none;
           font-family: Arial, sans-serif;
           font-weight: bold;
+          margin-bottom: 1rem;
         "
       >
         Ir a la tienda
       </a>
+      <p style="margin: 6px 0; font-size: small;">
+    CD Electrónica Argentina ® es una marca registrada. Todos los derechos reservados ©
+    <span id="year"></span>.
+  </p>
+  <p style="margin: 4px 0; font-size: small;">
+    Desarrollado con <span style="color: #e63946;">❤</span> por
+    <a
+      href="https://www.raccoonnow.com.ar"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        color: #80caff;
+        text-decoration: none;
+        font-weight: bold;
+      "
+      >Raccoon Now</a
+    >.
+  </p>
     </div>
 
     <script>
@@ -565,46 +607,6 @@
 
       renderBandas();
     </script>
-
-<footer
-  style="
-    width: 100%;
-    margin-top: 40px;
-    padding: 20px 10px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.05);
-    color: #ddd;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-  "
->
-  <p style="margin: 6px 0;">
-    CD Electrónica Argentina ® es una marca registrada. Todos los derechos reservados ©
-    <span id="year"></span>.
-  </p>
-  <p style="margin: 4px 0;">
-    Desarrollado con <span style="color: #e63946;">❤</span> por
-    <a
-      href="https://www.raccoonnow.com.ar"
-      target="_blank"
-      rel="noopener noreferrer"
-      style="
-        color: #80caff;
-        text-decoration: none;
-        font-weight: bold;
-      "
-      >Raccoon Now</a
-    >.
-  </p>
-</footer>
-
-<script>
-  // Mostrar automáticamente el año actual
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
-
-
 
   </body>
 </html>
