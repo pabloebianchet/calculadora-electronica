@@ -32,17 +32,16 @@
       }
 
       h1 {
-        color: var(--accent);
-        text-shadow: 0 0 8px var(--accent);
+        color: white;
         text-align: center;
         font-size: clamp(1.2rem, 4vw, 2rem);
       }
 
       .calculator {
-        background: rgba(253, 253, 253, 0.08);
+        background: #00566e;
         backdrop-filter: blur(8px);
         border-radius: 16px;
-        box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        /* box-shadow: 0 0 20px rgba(0, 255, 157, 0.2); */
         padding: 1.5rem;
         max-width: 700px;
         width: 100%;
@@ -213,27 +212,6 @@
         <div class="result" id="resDiv"></div>
       </div>
 
-      <!-- Botón Ir a la tienda -->
-      <div style="text-align: center; margin-top: 20px">
-        <a
-          href="https://cd-electronica.tiendanube.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="
-            display: inline-block;
-            background-color: #00566e
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-          "
-        >
-          Ir a la tienda
-        </a>
-      </div>
-
       <!-- Resistencias -->
       <div id="resistencias" class="section">
         <label>Tipo de conexión:</label>
@@ -250,14 +228,52 @@
       <div id="colores" class="section">
         <label>Cantidad de bandas:</label>
         <select id="numBandas" onchange="renderBandas()">
-          <option value="4">4 Bandas</option>
-          <option value="5">5 Bandas</option>
-          <option value="6">6 Bandas</option>
+          <option style="background-color: #e9ecf0; color: #000" value="4">
+            4 Bandas
+          </option>
+          <option style="background-color: #e9ecf0; color: #000" value="5">
+            5 Bandas
+          </option>
+          <option style="background-color: #e9ecf0; color: #000" value="6">
+            6 Bandas
+          </option>
         </select>
+        <div
+          id="resistor-container"
+          style="text-align: center; margin-top: 15px"
+        >
+          <img
+            id="resistor-img"
+            src="imaagenBandas.png"
+            alt="Resistencia con bandas"
+            style="max-width: 250px; width: 100%; filter: brightness(0.95)"
+          />
+          <div id="band-overlay" style="position: relative; top: -100px"></div>
+        </div>
         <div class="band-row" id="bandInputs"></div>
         <button onclick="calcColor()">Calcular Valor</button>
         <div class="result" id="resColor"></div>
       </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px">
+      <a
+        href="https://cdelectronicaargentina.mitiendanube.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+          display: inline-block;
+          background-color: #335d97;
+          color: #fff;
+          padding: 10px 20px;
+          border-radius: 6px;
+          text-decoration: none;
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+        "
+      >
+        Ir a la tienda
+      </a>
     </div>
 
     <script>
@@ -372,16 +388,95 @@
             ? ["1ª", "2ª", "3ª", "Multiplicador", "Tolerancia"]
             : ["1ª", "2ª", "3ª", "Multiplicador", "Tolerancia", "Coef. Temp."];
 
+        const colorMap = {
+          Negro: "rgba(0, 0, 0, 0.7)",
+          Marrón: "rgba(139, 69, 19, 0.7)",
+          Rojo: "rgba(255, 0, 0, 0.7)",
+          Naranja: "rgba(255, 165, 0, 0.7)",
+          Amarillo: "rgba(255, 255, 0, 0.7)",
+          Verde: "rgba(0, 128, 0, 0.7)",
+          Azul: "rgba(0, 0, 255, 0.7)",
+          Violeta: "rgba(138, 43, 226, 0.7)",
+          Gris: "rgba(128, 128, 128, 0.7)",
+          Blanco: "rgba(255, 255, 255, 0.7)",
+          Dorado: "rgba(218, 165, 32, 0.7)",
+          Plateado: "rgba(192, 192, 192, 0.7)",
+        };
+
         labels.forEach((lab, i) => {
           const sel = document.createElement("select");
           sel.id = "banda" + i;
+          sel.style.transition = "background-color 0.3s ease";
+
           colores.forEach((c) => {
             const opt = document.createElement("option");
             opt.value = c.nombre;
             opt.textContent = c.nombre;
+
+            const bg = colorMap[c.nombre];
+            opt.style.backgroundColor = bg;
+            opt.style.color = ["Amarillo", "Blanco", "Plateado"].includes(
+              c.nombre
+            )
+              ? "#000"
+              : "#fff";
+
             sel.appendChild(opt);
           });
+
+          // Al cambiar, se actualiza el color del fondo con transparencia
+          sel.addEventListener("change", (e) => {
+            const selected = e.target.value;
+            const bg = colorMap[selected];
+            e.target.style.backgroundColor = bg;
+            e.target.style.color = ["Amarillo", "Blanco", "Plateado"].includes(
+              selected
+            )
+              ? "#000"
+              : "#fff";
+          });
+
           container.appendChild(sel);
+        });
+      }
+
+      function updateResistorBands() {
+        const num = parseInt(document.getElementById("numBandas").value);
+        const container = document.getElementById("band-overlay");
+        container.innerHTML = "";
+
+        const selectedColors = [];
+        for (let i = 0; i < num; i++) {
+          const sel = document.getElementById("banda" + i);
+          if (sel) selectedColors.push(sel.value);
+        }
+
+        const colorMap = {
+          Negro: "#000000",
+          Marrón: "#8B4513",
+          Rojo: "#FF0000",
+          Naranja: "#FFA500",
+          Amarillo: "#FFFF00",
+          Verde: "#008000",
+          Azul: "#0000FF",
+          Violeta: "#8A2BE2",
+          Gris: "#808080",
+          Blanco: "#FFFFFF",
+          Dorado: "#DAA520",
+          Plateado: "#C0C0C0",
+        };
+
+        // Crear bandas visuales sobre la resistencia
+        selectedColors.forEach((color, index) => {
+          const band = document.createElement("div");
+          band.style.display = "inline-block";
+          band.style.width = "10px";
+          band.style.height = "60px";
+          band.style.margin = "0 5px";
+          band.style.backgroundColor = colorMap[color] || "transparent";
+          band.style.borderRadius = "2px";
+          band.style.opacity = "0.8";
+          container.appendChild(band);
         });
       }
 
