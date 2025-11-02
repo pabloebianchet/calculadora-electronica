@@ -922,26 +922,38 @@
 
         <div class="result-section">
           <div class="value-box">
+            <!-- Campos ocultos necesarios para el script -->
             <input
               id="valorResistencia"
               type="text"
-              autocomplete="off"
-              spellcheck="false"
-              readonly
-              style="
-                background-color: #fff;
-                color: #000;
-                cursor: default;
-                pointer-events: none;
-              "
+              style="display: none"
+              value=""
             />
-            <select id="unidad" onchange="actualizarUnidad()">
+            <select id="unidad" style="display: none">
               <option value="Ω">Ω</option>
               <option value="kΩ">kΩ</option>
               <option value="MΩ">MΩ</option>
               <option value="GΩ">GΩ</option>
             </select>
-            <button class="btn btn-calc" onclick="resetCalc()">Borrar</button>
+            <button
+              onclick="resetCalc()"
+              style="
+                background-color: #00566e;
+                color: #fff;
+                border: none;
+                padding: 10px 24px;
+                border-radius: 30px;
+                font-weight: 500;
+                cursor: pointer;
+                width: 100%;
+                max-width: 300px;
+                transition: background 0.3s;
+              "
+              onmouseover="this.style.backgroundColor='#007a99'"
+              onmouseout="this.style.backgroundColor='#00566e'"
+            >
+              Borrar
+            </button>
           </div>
           <div id="resultado" class="output">Valor de la resistencia: —</div>
 
