@@ -81,6 +81,16 @@
       }
 
       /* ======= VISTA MÓVIL ======= */
+      /* ==== Animación suave del menú hamburguesa ==== */
+      nav#nav-links {
+        transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+      }
+
+      nav#nav-links.fade-out {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
       @media (max-width: 768px) {
         .hamburger {
           display: block;
@@ -1165,13 +1175,14 @@
     <script>
       /* ==== Navegación ==== */
       /* ==== Navegación con guardado de estado ==== */
+      /* ==== Navegación con guardado y cierre suave ==== */
       function showSection(name) {
         // Ocultar todas las secciones
         document
           .querySelectorAll(".section")
           .forEach((s) => s.classList.remove("active"));
 
-        // Quitar clase "active" de todos los botones
+        // Quitar clase "active" de los botones
         document
           .querySelectorAll(".header button")
           .forEach((b) => b.classList.remove("active"));
@@ -1183,17 +1194,27 @@
         // 🔹 Guardar la última sección seleccionada
         localStorage.setItem("seccionActiva", name);
 
-        // 🔹 Cerrar el menú hamburguesa si está abierto (en modo móvil)
+        // 🔹 Cerrar el menú hamburguesa con animación si está abierto
         const nav = document.getElementById("nav-links");
         if (nav.classList.contains("show")) {
-          nav.classList.remove("show");
+          nav.classList.add("fade-out");
+          setTimeout(() => {
+            nav.classList.remove("show", "fade-out");
+          }, 250); // duración del fade
         }
       }
 
       /* ==== Menú hamburguesa ==== */
       function toggleMenu() {
         const nav = document.getElementById("nav-links");
-        nav.classList.toggle("show");
+        if (nav.classList.contains("show")) {
+          nav.classList.add("fade-out");
+          setTimeout(() => {
+            nav.classList.remove("show", "fade-out");
+          }, 250);
+        } else {
+          nav.classList.add("show");
+        }
       }
 
       /* ==== Restaurar última sección al cargar ==== */
