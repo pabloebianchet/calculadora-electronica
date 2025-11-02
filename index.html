@@ -658,6 +658,81 @@
       <div id="section-resist" class="section">
         <h2>Calculadora de Resistencias por Código de Colores</h2>
         <h2>Calcular desde Bandas</h2>
+
+        <div
+          style="
+            background: #eef8fa;
+            border-left: 5px solid #0096b2;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            color: #003f4f;
+            font-family: 'Nunito', sans-serif;
+            line-height: 1.6;
+          "
+        >
+          <h3
+            style="
+              margin-top: 0;
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: #00566e;
+            "
+          >
+            🧭 Cómo usar esta sección
+          </h3>
+
+          <ul style="margin: 10px 0 0 20px; padding: 0">
+            <li style="margin-bottom: 10px">
+              <strong>1️⃣ Seleccioná</strong> la <b>cantidad de bandas</b> de la
+              resistencia (4, 5 o 6) según el tipo que tengas.<br />
+              <span style="color: #007c92">4 bandas:</span> resistencias
+              comunes.<br />
+              <span style="color: #007c92">5 y 6 bandas:</span> resistencias de
+              precisión.
+            </li>
+
+            <li style="margin-bottom: 10px">
+              <strong>2️⃣ Elegí los colores</strong> correspondientes en cada
+              banda según el código impreso:
+              <ul
+                style="
+                  margin-top: 6px;
+                  list-style-type: circle;
+                  margin-left: 20px;
+                "
+              >
+                <li><b>Primeras 2 o 3 bandas:</b> dígitos significativos.</li>
+                <li><b>Siguiente banda:</b> multiplicador (potencia de 10).</li>
+                <li><b>Luego:</b> tolerancia (margen de error).</li>
+                <li>
+                  <b>En 6 bandas:</b> se agrega la banda TCR (coeficiente de
+                  temperatura, en ppm/K).
+                </li>
+              </ul>
+            </li>
+
+            <li style="margin-bottom: 10px">
+              <strong>3️⃣ El sistema calculará automáticamente:</strong>
+              <ul
+                style="
+                  margin-top: 6px;
+                  list-style-type: circle;
+                  margin-left: 20px;
+                "
+              >
+                <li>El <b>valor equivalente</b> (Ω, kΩ o MΩ).</li>
+                <li>El <b>porcentaje de tolerancia</b>.</li>
+                <li>Y, si aplica, el <b>coeficiente TCR</b>.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>4️⃣ Si querés reiniciar</strong> la selección, presioná el
+              botón <b>“Borrar selección”</b>.
+            </li>
+          </ul>
+        </div>
         <div class="tabs">
           <div id="tab4" class="tab active" onclick="setBandas(4)">
             4 Bandas
@@ -818,12 +893,81 @@
                 border-radius: 10px;
               "
             >
-              <h2>Calcular desde valor de resistencia</h2>
-              <p style="font-size: 14px; color: #333">
-                Ingresá un valor (por ejemplo <b>2.64 kΩ</b> o <b>470 Ω</b>),
-                elegí la nomenclatura y la cantidad de bandas para obtener los
-                colores correspondientes.
-              </p>
+              <div
+                style="
+                  background: #eef8fa;
+                  border-left: 5px solid #0096b2;
+                  padding: 20px 25px;
+                  border-radius: 8px;
+                  margin-bottom: 25px;
+                  color: #003f4f;
+                  font-family: 'Nunito', sans-serif;
+                  line-height: 1.6;
+                "
+              >
+                <h2
+                  style="
+                    margin-top: 0;
+                    font-size: 1.35rem;
+                    font-weight: 800;
+                    color: #00566e;
+                  "
+                >
+                  🎚️ Calcular desde valor de resistencia
+                </h2>
+
+                <ul style="margin: 10px 0 0 20px; padding: 0">
+                  <li style="margin-bottom: 10px">
+                    <strong>1️⃣ Ingresá el valor</strong> de la resistencia que
+                    querés calcular (por ejemplo: <b>2.64 kΩ</b>, <b>470 Ω</b> o
+                    <b>1 MΩ</b>).
+                  </li>
+
+                  <li style="margin-bottom: 10px">
+                    <strong>2️⃣ Elegí la nomenclatura</strong> (Ω, kΩ o MΩ) según
+                    el formato en que ingresaste el valor.
+                  </li>
+
+                  <li style="margin-bottom: 10px">
+                    <strong>3️⃣ Seleccioná la cantidad de bandas</strong> de la
+                    resistencia que quieras representar:
+                    <br />
+                    <span style="color: #007c92">4 bandas:</span> resistencias
+                    estándar.<br />
+                    <span style="color: #007c92">5 o 6 bandas:</span>
+                    resistencias de precisión.
+                  </li>
+
+                  <li style="margin-bottom: 10px">
+                    <strong>4️⃣ Presioná “Calcular”</strong> para obtener los
+                    colores correspondientes a cada banda:
+                    <ul
+                      style="
+                        margin-top: 6px;
+                        list-style-type: circle;
+                        margin-left: 20px;
+                      "
+                    >
+                      <li>
+                        Las primeras indican los <b>dígitos significativos</b>.
+                      </li>
+                      <li>
+                        Luego aparece el <b>multiplicador</b> (potencia de 10).
+                      </li>
+                      <li>
+                        Y finalmente la <b>tolerancia</b> y, si aplica, el
+                        <b>TCR</b>.
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li>
+                    <strong>5️⃣ Si querés reiniciar</strong> los valores,
+                    presioná el botón <b>“Restablecer”</b> o
+                    <b>“Borrar selección”</b>.
+                  </li>
+                </ul>
+              </div>
 
               <!-- Selector de cantidad de bandas -->
               <label for="bandasSelector">Cantidad de bandas:</label>
