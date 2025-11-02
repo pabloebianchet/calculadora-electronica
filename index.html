@@ -984,6 +984,8 @@
           <!-- === BLOQUE CALCULADORA DE BANDAS DESDE VALOR === -->
 
           <div>
+            <!-- === BLOQUE CALCULADORA DE BANDAS DESDE VALOR (aislado y con resistor independiente) === -->
+            <!-- === CALCULADORA DE BANDAS DESDE VALOR (con etiquetas de color) === -->
             <div
               id="calc-valor-resistencia"
               style="
@@ -993,85 +995,22 @@
                 border-radius: 10px;
               "
             >
-              <div
-                style="
-                  background: #eef8fa;
-                  border-left: 5px solid #0096b2;
-                  padding: 20px 25px;
-                  border-radius: 8px;
-                  margin-bottom: 25px;
-                  color: #003f4f;
-                  font-family: 'Nunito', sans-serif;
-                  line-height: 1.6;
-                "
-              >
-                <h2
-                  style="
-                    margin-top: 0;
-                    font-size: 1.35rem;
-                    font-weight: 800;
-                    color: #00566e;
-                  "
-                >
-                  🎚️ Calcular desde valor de resistencia
-                </h2>
+              <h2 style="font-size: 1.4rem; color: #00566e; font-weight: 800">
+                🎚️ Calcular desde valor de resistencia
+              </h2>
 
-                <ul style="margin: 10px 0 0 20px; padding: 0">
-                  <li style="margin-bottom: 10px">
-                    <strong>1️⃣ Ingresá el valor</strong> de la resistencia que
-                    querés calcular (por ejemplo: <b>2.64 kΩ</b>, <b>470 Ω</b> o
-                    <b>1 MΩ</b>).
-                  </li>
-
-                  <li style="margin-bottom: 10px">
-                    <strong>2️⃣ Elegí la nomenclatura</strong> (Ω, kΩ o MΩ) según
-                    el formato en que ingresaste el valor.
-                  </li>
-
-                  <li style="margin-bottom: 10px">
-                    <strong>3️⃣ Seleccioná la cantidad de bandas</strong> de la
-                    resistencia que quieras representar:
-                    <br />
-                    <span style="color: #007c92">4 bandas:</span> resistencias
-                    estándar.<br />
-                    <span style="color: #007c92">5 o 6 bandas:</span>
-                    resistencias de precisión.
-                  </li>
-
-                  <li style="margin-bottom: 10px">
-                    <strong>4️⃣ Presioná “Calcular”</strong> para obtener los
-                    colores correspondientes a cada banda:
-                    <ul
-                      style="
-                        margin-top: 6px;
-                        list-style-type: circle;
-                        margin-left: 20px;
-                      "
-                    >
-                      <li>
-                        Las primeras indican los <b>dígitos significativos</b>.
-                      </li>
-                      <li>
-                        Luego aparece el <b>multiplicador</b> (potencia de 10).
-                      </li>
-                      <li>
-                        Y finalmente la <b>tolerancia</b> y, si aplica, el
-                        <b>TCR</b>.
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li>
-                    <strong>5️⃣ Si querés reiniciar</strong> los valores,
-                    presioná el botón <b>“Restablecer”</b> o
-                    <b>“Borrar selección”</b>.
-                  </li>
-                </ul>
-              </div>
+              <p style="font-size: 14px; color: #333">
+                Ingresá un valor (por ejemplo <b>2.64 kΩ</b> o <b>470 Ω</b>),
+                elegí la nomenclatura y la cantidad de bandas para ver el
+                resistor con sus colores y descripciones.
+              </p>
 
               <!-- Selector de cantidad de bandas -->
-              <label for="bandasSelector">Cantidad de bandas:</label>
-              <select id="bandasSelector" onchange="mostrarBandasDesdeValor()">
+              <label for="bandasSelectorValor">Cantidad de bandas:</label>
+              <select
+                id="bandasSelectorValor"
+                onchange="mostrarBandasDesdeValor()"
+              >
                 <option value="4">4 bandas</option>
                 <option value="5">5 bandas</option>
                 <option value="6">6 bandas</option>
@@ -1098,11 +1037,11 @@
                     border-radius: 6px;
                   "
                   onkeydown="
-        const k=event.key;
-        if(['Backspace','Tab','ArrowLeft','ArrowRight','Delete','Enter'].includes(k)||event.ctrlKey||event.metaKey)return;
-        if(!/[0-9.,]/.test(k))event.preventDefault();
-        if((k==='.'||k===',')&&/[.,]/.test(this.value))event.preventDefault();
-      "
+      const k=event.key;
+      if(['Backspace','Tab','ArrowLeft','ArrowRight','Delete','Enter'].includes(k)||event.ctrlKey||event.metaKey)return;
+      if(!/[0-9.,]/.test(k))event.preventDefault();
+      if((k==='.'||k===',')&&/[.,]/.test(this.value))event.preventDefault();
+    "
                   oninput="this.value=this.value.replace(/,/g,'.');"
                 />
                 <select id="unidadInput" onchange="mostrarBandasDesdeValor()">
@@ -1128,27 +1067,58 @@
                   font-size: 16px;
                   font-weight: 600;
                   color: #004455;
+                  text-align: center;
                 "
               >
                 Ingresá un valor para calcular las bandas.
               </div>
 
-              <!-- Valor numérico mostrado (solo lectura) -->
-              <div style="margin-top: 10px"></div>
-
-              <!-- Bandas resultantes -->
+              <!-- Dibujo SVG del resistor -->
               <div
-                id="bandasResultado"
+                style="display: flex; justify-content: center; margin-top: 20px"
+              >
+                <svg
+                  id="resistorSVG_valor"
+                  width="300"
+                  height="100"
+                  viewBox="0 0 300 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!-- Terminal izquierda -->
+                  <rect x="0" y="45" width="60" height="10" fill="#999" />
+                  <!-- Cuerpo -->
+                  <rect
+                    x="60"
+                    y="30"
+                    width="180"
+                    height="40"
+                    rx="10"
+                    ry="10"
+                    fill="#f1c27d"
+                    stroke="#c69c6d"
+                    stroke-width="2"
+                  />
+                  <!-- Terminal derecha -->
+                  <rect x="240" y="45" width="60" height="10" fill="#999" />
+                </svg>
+              </div>
+
+              <!-- Etiquetas debajo del resistor -->
+              <div
+                id="bandasInfo"
                 style="
-                  margin-top: 15px;
                   display: flex;
+                  justify-content: center;
                   flex-wrap: wrap;
-                  gap: 10px;
+                  gap: 20px;
+                  margin-top: 20px;
+                  font-family: 'Nunito', sans-serif;
+                  color: #000;
                 "
               ></div>
 
               <script>
-                const coloresBandas = [
+                const coloresBandasValor = [
                   {
                     nombre: "Negro",
                     valor: 0,
@@ -1249,25 +1219,26 @@
 
                 function mostrarBandasDesdeValor() {
                   const n = parseInt(
-                    document.getElementById("bandasSelector").value
+                    document.getElementById("bandasSelectorValor").value
                   );
                   const unidad = document.getElementById("unidadInput").value;
                   const txt = document
                     .getElementById("inputValor")
                     .value.trim();
-                  const contBandas = document.getElementById("bandasResultado");
                   const resultado = document.getElementById("resultadoValor");
-                  const campoValor =
-                    document.getElementById("valorResistencia");
+                  const svg = document.getElementById("resistorSVG_valor");
+                  const info = document.getElementById("bandasInfo");
 
-                  contBandas.innerHTML = "";
+                  svg
+                    .querySelectorAll(".resistor-band")
+                    .forEach((b) => b.remove());
+                  info.innerHTML = "";
+
                   if (!txt) {
                     resultado.textContent = "Ingresá un valor válido.";
-                    campoValor.value = "";
                     return;
                   }
 
-                  // Parsear valor
                   let valor = parseFloat(txt);
                   if (isNaN(valor)) {
                     resultado.textContent = "Valor inválido.";
@@ -1278,13 +1249,9 @@
                   else if (unidad === "MΩ") valor *= 1e6;
                   else if (unidad === "GΩ") valor *= 1e9;
 
-                  campoValor.value = `${valor.toLocaleString("es-ES", {
-                    maximumFractionDigits: 3,
-                  })} Ω`;
-
                   let mult = 1,
                     colorMult = null;
-                  for (const c of coloresBandas.filter((c) => c.mult)) {
+                  for (const c of coloresBandasValor.filter((c) => c.mult)) {
                     const d = valor / c.mult;
                     if (
                       (n === 4 && d >= 10 && d < 100) ||
@@ -1296,7 +1263,9 @@
                     }
                   }
                   if (!colorMult)
-                    colorMult = coloresBandas.find((c) => c.nombre === "Negro");
+                    colorMult = coloresBandasValor.find(
+                      (c) => c.nombre === "Negro"
+                    );
 
                   const digitos = Math.round(valor / mult);
                   const d1 = Math.floor(digitos / 100) % 10;
@@ -1304,60 +1273,115 @@
                   const d3 = digitos % 10;
 
                   const c1 =
-                    coloresBandas.find((c) => c.valor === d1) ||
-                    coloresBandas[0];
+                    coloresBandasValor.find((c) => c.valor === d1) ||
+                    coloresBandasValor[0];
                   const c2 =
-                    coloresBandas.find((c) => c.valor === d2) ||
-                    coloresBandas[0];
+                    coloresBandasValor.find((c) => c.valor === d2) ||
+                    coloresBandasValor[0];
                   const c3 =
-                    coloresBandas.find((c) => c.valor === d3) ||
-                    coloresBandas[0];
-                  const cTol = coloresBandas.find((c) => c.nombre === "Dorado");
-                  const cTcr = coloresBandas.find((c) => c.nombre === "Marrón");
+                    coloresBandasValor.find((c) => c.valor === d3) ||
+                    coloresBandasValor[0];
+                  const cTol = coloresBandasValor.find(
+                    (c) => c.nombre === "Dorado"
+                  );
+                  const cTcr = coloresBandasValor.find(
+                    (c) => c.nombre === "Marrón"
+                  );
 
                   const bandas =
                     n === 4
                       ? [
-                          { ...c1, tipo: "1ª Banda" },
-                          { ...c2, tipo: "2ª Banda" },
-                          { ...colorMult, tipo: "3ª Banda Multiplicador" },
-                          { ...cTol, tipo: "4ª Banda Tolerancia" },
+                          { ...c1, tipo: "1ª cifra", desc: d1 },
+                          { ...c2, tipo: "2ª cifra", desc: d2 },
+                          {
+                            ...colorMult,
+                            tipo: "Multiplicador",
+                            desc: "×" + colorMult.mult,
+                          },
+                          {
+                            ...cTol,
+                            tipo: "Tolerancia",
+                            desc: "±" + cTol.tol + "%",
+                          },
                         ]
                       : n === 5
                       ? [
-                          { ...c1, tipo: "1ª Banda" },
-                          { ...c2, tipo: "2ª Banda" },
-                          { ...c3, tipo: "3ª Banda" },
-                          { ...colorMult, tipo: "4ª Banda Multiplicador" },
-                          { ...cTol, tipo: "5ª Banda Tolerancia" },
+                          { ...c1, tipo: "1ª cifra", desc: d1 },
+                          { ...c2, tipo: "2ª cifra", desc: d2 },
+                          { ...c3, tipo: "3ª cifra", desc: d3 },
+                          {
+                            ...colorMult,
+                            tipo: "Multiplicador",
+                            desc: "×" + colorMult.mult,
+                          },
+                          {
+                            ...cTol,
+                            tipo: "Tolerancia",
+                            desc: "±" + cTol.tol + "%",
+                          },
                         ]
                       : [
-                          { ...c1, tipo: "1ª cifra" },
-                          { ...c2, tipo: "2ª cifra" },
-                          { ...c3, tipo: "3ª cifra" },
-                          { ...colorMult, tipo: "4ª Banda Multiplicador" },
-                          { ...cTol, tipo: "5ª Banda Tolerancia" },
-                          { ...cTcr, tipo: "6ª Banda Coeficiente TCR" },
+                          { ...c1, tipo: "1ª cifra", desc: d1 },
+                          { ...c2, tipo: "2ª cifra", desc: d2 },
+                          { ...c3, tipo: "3ª cifra", desc: d3 },
+                          {
+                            ...colorMult,
+                            tipo: "Multiplicador",
+                            desc: "×" + colorMult.mult,
+                          },
+                          {
+                            ...cTol,
+                            tipo: "Tolerancia",
+                            desc: "±" + cTol.tol + "%",
+                          },
+                          { ...cTcr, tipo: "TCR", desc: cTcr.tcr + " ppm/K" },
                         ];
+
+                  const pos = {
+                    4: [80, 110, 150, 190],
+                    5: [75, 100, 125, 160, 190],
+                    6: [70, 95, 120, 150, 180, 210],
+                  };
+
+                  bandas.forEach((b, i) => {
+                    // Banda en el resistor
+                    const rect = document.createElementNS(
+                      "http://www.w3.org/2000/svg",
+                      "rect"
+                    );
+                    rect.setAttribute("x", pos[n][i]);
+                    rect.setAttribute("y", 30);
+                    rect.setAttribute("width", 8);
+                    rect.setAttribute("height", 40);
+                    rect.setAttribute("fill", b.hex);
+                    rect.setAttribute("class", "resistor-band");
+                    svg.appendChild(rect);
+
+                    // Texto descriptivo debajo
+                    const div = document.createElement("div");
+                    div.style.textAlign = "center";
+                    div.innerHTML = `
+    <div style="background:${b.hex};width:40px;height:10px;margin:0 auto;border-radius:2px;"></div>
+    <strong>${b.tipo}</strong><br>
+    <span>${b.nombre}</span><br>
+    <small>${b.desc}</small>
+  `;
+
+                    /* ✅ Fuerza todo el texto a negro */
+                    div.style.color = "#000";
+                    div.style.marginTop = "5px";
+                    div.style.background = "#fff";
+                    div.style.padding = "6px 10px";
+                    div.style.border = "1px solid #ccc";
+                    div.style.borderRadius = "6px";
+                    div.style.minWidth = "90px";
+                    div.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+                    info.appendChild(div);
+                  });
 
                   resultado.textContent = `${valor.toLocaleString("es-ES", {
                     maximumFractionDigits: 3,
                   })} Ω → ${n} bandas`;
-
-                  bandas.forEach((b) => {
-                    const div = document.createElement("div");
-                    div.innerHTML = `<strong>${b.tipo}</strong><br>${b.nombre}`;
-                    div.style.background = b.hex;
-                    div.style.padding = "10px";
-                    div.style.color =
-                      b.nombre === "Amarillo" || b.nombre === "Blanco"
-                        ? "#000"
-                        : "#fff";
-                    div.style.borderRadius = "6px";
-                    div.style.textAlign = "center";
-                    div.style.minWidth = "90px";
-                    contBandas.appendChild(div);
-                  });
                 }
               </script>
             </div>
