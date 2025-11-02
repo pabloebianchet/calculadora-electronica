@@ -1164,25 +1164,44 @@
 
     <script>
       /* ==== Navegación ==== */
+      /* ==== Navegación con guardado de estado ==== */
       function showSection(name) {
+        // Ocultar todas las secciones
         document
           .querySelectorAll(".section")
           .forEach((s) => s.classList.remove("active"));
+
+        // Quitar clase "active" de todos los botones
         document
           .querySelectorAll(".header button")
           .forEach((b) => b.classList.remove("active"));
+
+        // Activar la sección seleccionada
         document.getElementById("section-" + name).classList.add("active");
         document.getElementById("btn-" + name).classList.add("active");
+
+        // 🔹 Guardar la última sección seleccionada
+        localStorage.setItem("seccionActiva", name);
+
+        // 🔹 Cerrar el menú hamburguesa si está abierto (en modo móvil)
+        const nav = document.getElementById("nav-links");
+        if (nav.classList.contains("show")) {
+          nav.classList.remove("show");
+        }
       }
 
-      //   Menu hamburguesa
-      //
-
-      /* === Menú hamburguesa === */
+      /* ==== Menú hamburguesa ==== */
       function toggleMenu() {
         const nav = document.getElementById("nav-links");
         nav.classList.toggle("show");
       }
+
+      /* ==== Restaurar última sección al cargar ==== */
+      window.addEventListener("DOMContentLoaded", () => {
+        const guardada = localStorage.getItem("seccionActiva");
+        const inicial = guardada ? guardada : "ohm"; // por defecto "Ley de Ohm"
+        showSection(inicial);
+      });
 
       /* ==== Ley de Ohm ==== */
       function calcularOhm() {
