@@ -546,75 +546,78 @@
         <br />
 
         <div
-          style="
-            background: #eef8fa;
-            border-left: 5px solid #0096b2;
-            padding: 18px 5vw;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: #003f4f;
-            font-family: 'Nunito', sans-serif;
-            line-height: 1.6;
-            max-width: 100%;
-            box-sizing: border-box;
-            word-wrap: break-word;
-          "
+          class="resistencias-inputs"
+          style="display: flex; flex-wrap: wrap; gap: 10px; width: 100%"
         >
-          <h2
+          <div
+            class="input-group"
             style="
-              margin-top: 0;
-              font-size: clamp(1.2rem, 4vw, 1.35rem);
-              font-weight: 800;
-              color: #00566e;
+              flex: 1 1 200px;
+              display: flex;
+              align-items: center;
+              min-width: 140px;
             "
           >
-            🎚️ Calcular desde valor de resistencia
-          </h2>
+            <input
+              type="number"
+              id="r1"
+              placeholder="R1 (Ω)"
+              style="
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px 0 0 6px;
+                font-size: 16px;
+              "
+            />
+            <span
+              class="unit"
+              style="
+                background: #eee;
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                border-left: none;
+                border-radius: 0 6px 6px 0;
+                font-size: 16px;
+              "
+              >Ω</span
+            >
+          </div>
 
-          <ul
+          <div
+            class="input-group"
             style="
-              margin: 10px 0 0 1rem;
-              padding: 0;
-              list-style-position: outside;
+              flex: 1 1 200px;
+              display: flex;
+              align-items: center;
+              min-width: 140px;
             "
           >
-            <li style="margin-bottom: 10px">
-              <strong>1️⃣ Ingresá el valor</strong> de la resistencia (por
-              ejemplo: <b>2.64 kΩ</b>, <b>470 Ω</b> o <b>1 MΩ</b>).
-            </li>
-
-            <li style="margin-bottom: 10px">
-              <strong>2️⃣ Elegí la nomenclatura</strong> (Ω, kΩ o MΩ) según el
-              formato ingresado.
-            </li>
-
-            <li style="margin-bottom: 10px">
-              <strong>3️⃣ Seleccioná la cantidad de bandas</strong> (4, 5 o 6):
-              <br />
-              <span style="color: #007c92">4 bandas:</span> estándar. <br />
-              <span style="color: #007c92">5 o 6 bandas:</span> precisión.
-            </li>
-
-            <li style="margin-bottom: 10px">
-              <strong>4️⃣ Presioná “Calcular”</strong> para obtener los colores:
-              <ul
-                style="
-                  margin-top: 6px;
-                  list-style-type: circle;
-                  margin-left: 1.2rem;
-                "
-              >
-                <li><b>Dígitos significativos</b></li>
-                <li><b>Multiplicador</b> (potencia de 10)</li>
-                <li><b>Tolerancia</b> y, si aplica, <b>TCR</b></li>
-              </ul>
-            </li>
-
-            <li>
-              <strong>5️⃣ Si querés reiniciar</strong> los valores, presioná
-              <b>“Restablecer”</b> o <b>“Borrar selección”</b>.
-            </li>
-          </ul>
+            <input
+              type="number"
+              id="r2"
+              placeholder="R2 (Ω)"
+              style="
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px 0 0 6px;
+                font-size: 16px;
+              "
+            />
+            <span
+              class="unit"
+              style="
+                background: #eee;
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                border-left: none;
+                border-radius: 0 6px 6px 0;
+                font-size: 16px;
+              "
+              >Ω</span
+            >
+          </div>
         </div>
 
         <div class="buttons">
