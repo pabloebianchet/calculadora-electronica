@@ -273,11 +273,35 @@
       }
       select {
         width: 100%;
-        padding: 10px;
+        padding: 12px 14px;
         border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 15px;
-        background: #fff;
+        border-radius: 8px;
+        font-size: 16px; /* Aumenta legibilidad */
+        font-weight: 500;
+        background-color: #ffffff;
+        color: #333; /* Letras gris oscuro */
+        appearance: none; /* Elimina el estilo nativo */
+        -webkit-appearance: none; /* Safari iOS */
+        -moz-appearance: none; /* Firefox */
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2300566e' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 10px;
+      }
+
+      /* 🔹 Hover y focus */
+      select:focus {
+        outline: none;
+        border-color: #00566e;
+        box-shadow: 0 0 4px rgba(0, 86, 110, 0.3);
+      }
+
+      /* 🔹 En pantallas pequeñas */
+      @media (max-width: 600px) {
+        select {
+          font-size: 17px;
+          padding: 14px 16px;
+        }
       }
       .resistor-svg {
         width: 60%;
