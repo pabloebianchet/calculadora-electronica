@@ -696,13 +696,15 @@
         </select>
 
         <label>Resistencias (en Ω):</label>
-        <div class="input-group">
-          <input
-            type="text"
-            id="resistenciasInput"
-            placeholder="Ej: 100,220,330"
-          />
+
+        <div id="resistenciasContainer">
+          <div class="res-item">
+            <input type="number" class="resInput" placeholder="Ej: 100" />
+          </div>
         </div>
+
+        <input type="hidden" id="resistenciasInput" />
+        <button type="button" id="addResBtn">+</button>
 
         <div class="buttons">
           <button class="btn btn-calc" onclick="calcularResistencias()">
@@ -1081,10 +1083,9 @@
               <div
                 style="display: flex; justify-content: center; margin-top: 20px"
               >
-                <svg class="resistor-svg"
+                <svg
+                  class="resistor-svg"
                   id="resistorSVG_valor"
-                  width="300"
-                  height="100"
                   viewBox="0 0 300 100"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -1672,6 +1673,9 @@
 
       /* ==== RESISTENCIAS ==== */
       function calcularResistencias() {
+        // 🔄 sincroniza los valores visibles con el campo oculto
+        sincronizarResistencias();
+
         const tipo = document.getElementById("tipoConexion").value;
         const input = document.getElementById("resistenciasInput").value.trim();
         const resultado = document.getElementById("resultadoResistencias");
@@ -1701,10 +1705,19 @@
           req = 1 / inversa;
         }
 
-        resultado.textContent = `Resultado: ${req.toFixed(3)} Ω`;
+        resultado.textContent = `Resultado: ${req.toFixed(2)} Ω`;
       }
 
       function resetearResistencias() {
+        // 🔄 borra todos los casilleros y deja solo uno
+        const container = document.getElementById("resistenciasContainer");
+        container.innerHTML = `
+    <div class="res-item">
+      <input type="number" class="resInput" placeholder="Ej: 100" />
+    </div>
+  `;
+
+        // limpia el input oculto y el resultado
         document.getElementById("resistenciasInput").value = "";
         document.getElementById("resultadoResistencias").textContent =
           "Resultado: —";
@@ -2161,5 +2174,64 @@
       generarSelectores();
       generarSVG();
     </script>
+
+    <script>
+      const container = document.getElementById("resistenciasContainer");
+      const addResBtn = document.getElementById("addResBtn");
+      const hiddenInput = document.getElementById("resistenciasInput");
+
+      addResBtn.addEventListener("click", () => {
+        const div = document.createElement("div");
+        div.className = "res-item";
+        div.innerHTML = `<input type="number" class="resInput" placeholder="Ej: 220" />`;
+        container.appendChild(div);
+      });
+
+      container.addEventListener("input", () => {
+        const valores = Array.from(document.querySelectorAll(".resInput"))
+          .map((i) => i.value.trim())
+          .filter((v) => v !== "")
+          .join(",");
+        hiddenInput.value = valores;
+      });
+
+      function sincronizarResistencias() {
+        const hiddenInput = document.getElementById("resistenciasInput");
+        const valores = Array.from(document.querySelectorAll(".resInput"))
+          .map((i) => i.value.trim())
+          .filter((v) => v !== "")
+          .join(",");
+        hiddenInput.value = valores;
+      }
+    </script>
+
+    <style>
+      #resistenciasContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .resInput {
+        width: 120px;
+        padding: 6px;
+      }
+
+      #addResBtn {
+        background-color: #0096b2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+
+      #addResBtn:hover {
+        background-color: #00bcd4;
+      }
+    </style>
   </body>
 </html>
