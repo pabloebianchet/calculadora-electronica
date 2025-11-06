@@ -1601,19 +1601,45 @@
         }
       }
       function calcularPotencia() {
-        const f = formula.value,
-          v1 = parseFloat(valor1.value),
-          v2 = parseFloat(valor2.value);
-        if (isNaN(v1) || isNaN(v2)) {
-          resultadoP.textContent = "Por favor completá ambos valores.";
-          return;
-        }
-        let P = 0;
-        if (f === "P=V*I") P = v1 * v2;
-        if (f === "P=I2R") P = v1 ** 2 * v2;
-        if (f === "P=V2R") P = v1 ** 2 / v2;
-        resultadoP.textContent = `Resultado: ${P.toFixed(3)} W`;
-      }
+  const f = formula.value,
+    v1 = parseFloat(valor1.value),
+    v2 = parseFloat(valor2.value);
+
+  if (isNaN(v1) || isNaN(v2)) {
+    resultadoP.textContent = "Por favor completá ambos valores.";
+    return;
+  }
+
+  let P = 0;
+
+  if (f === "P=V*I") P = v1 * v2;
+  if (f === "P=I2R") P = v1 ** 2 * v2;
+  if (f === "P=V2R") P = v1 ** 2 / v2;
+
+  // 🔹 Conversión a nomenclatura
+  const formatValue = (value) => {
+    let unidad = "W";
+    let val = value;
+
+    if (value >= 1_000_000) {
+      val = value / 1_000_000;
+      unidad = "MW";
+    } else if (value >= 1_000) {
+      val = value / 1_000;
+      unidad = "kW";
+    } else if (value < 1 && value >= 0.001) {
+      val = value * 1_000;
+      unidad = "mW";
+    } else if (value < 0.001) {
+      val = value * 1_000_000;
+      unidad = "µW";
+    }
+
+    return `${val.toFixed(2)} ${unidad}`;
+  };
+
+  resultadoP.textContent = `Resultado: ${formatValue(P)}`;
+}
       function resetearPotencia() {
         valor1.value = "";
         valor2.value = "";
@@ -1671,7 +1697,7 @@
         document.getElementById("resultadoDiv").textContent = "Resultado: —";
       }
 
-      /* ==== RESISTENCIAS ==== */
+      /* ==== SOLAPA RESISTENCIAS ==== */
       function calcularResistencias() {
         sincronizarResistencias();
 
@@ -1726,8 +1752,6 @@
         return `${(valor * 1e6).toFixed(2)} µΩ`;
       }
 
-      //  fin de calculos Resistencias //
-
       function resetearResistencias() {
         // 🔄 borra todos los casilleros y deja solo uno
         const container = document.getElementById("resistenciasContainer");
@@ -1736,6 +1760,8 @@
       <input type="number" class="resInput" placeholder="Ej: 100" />
     </div>
   `;
+
+        //  fin de calculos Resistencias //
 
         // limpia el input oculto y el resultado
         document.getElementById("resistenciasInput").value = "";
