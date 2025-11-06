@@ -1673,7 +1673,6 @@
 
       /* ==== RESISTENCIAS ==== */
       function calcularResistencias() {
-        // 🔄 sincroniza los valores visibles con el campo oculto
         sincronizarResistencias();
 
         const tipo = document.getElementById("tipoConexion").value;
@@ -1705,8 +1704,29 @@
           req = 1 / inversa;
         }
 
-        resultado.textContent = `Resultado: ${req.toFixed(2)} Ω`;
+        resultado.textContent = `Resultado: ${formatearResistencia(req)}`;
       }
+
+      function formatearResistencia(valor) {
+        const unidades = [
+          { limite: 1e9, sufijo: "GΩ", divisor: 1e9 },
+          { limite: 1e6, sufijo: "MΩ", divisor: 1e6 },
+          { limite: 1e3, sufijo: "kΩ", divisor: 1e3 },
+          { limite: 1, sufijo: "Ω", divisor: 1 },
+          { limite: 1e-3, sufijo: "mΩ", divisor: 1e-3 },
+        ];
+
+        for (const u of unidades) {
+          if (valor >= u.limite) {
+            return `${(valor / u.divisor).toFixed(2)} ${u.sufijo}`;
+          }
+        }
+
+        // si es menor a 0.001 Ω
+        return `${(valor * 1e6).toFixed(2)} µΩ`;
+      }
+
+      //  fin de calculos Resistencias //
 
       function resetearResistencias() {
         // 🔄 borra todos los casilleros y deja solo uno
