@@ -9,10 +9,38 @@
       rel="stylesheet"
     />
 
+    <!-- Estilos -->
     <style>
       * {
         box-sizing: border-box;
         font-family: "Nunito", sans-serif !important;
+      }
+
+      #resistenciasContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .resInput {
+        width: 120px;
+        padding: 6px;
+      }
+
+      #addResBtn {
+        background-color: #0096b2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+
+      #addResBtn:hover {
+        background-color: #00bcd4;
       }
 
       body {
@@ -82,6 +110,7 @@
 
       /* ======= VISTA MÓVIL ======= */
       /* ==== Animación suave del menú hamburguesa ==== */
+
       nav#nav-links {
         transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
       }
@@ -290,6 +319,7 @@
       }
 
       /* 🔹 Hover y focus */
+
       select:focus {
         outline: none;
         border-color: #00566e;
@@ -358,6 +388,8 @@
         }
       }
     </style>
+
+    <!-- Fin de Estilos -->
   </head>
   <body>
     <div class="app">
@@ -406,6 +438,7 @@
       </div>
 
       <!-- ==== LEY DE OHM ==== -->
+
       <div id="section-ohm" class="section active">
         <h2>Calculadora de Ley de Ohm</h2>
         <label>Voltaje (V)</label>
@@ -484,6 +517,7 @@
       </div>
 
       <!-- ==== POTENCIA ==== -->
+
       <div id="section-potencia" class="section">
         <h2>Calculadora de Potencia</h2>
 
@@ -553,6 +587,7 @@
       </div>
 
       <!-- ==== DIVISOR ==== -->
+
       <div id="section-divisor" class="section">
         <h2>Calculadora de Divisor</h2>
 
@@ -686,6 +721,7 @@
       </div>
 
       <!-- ==== RESISTENCIAS ==== -->
+
       <div id="section-resistencias" class="section">
         <h2>Calculadora de Resistencias Equivalentes</h2>
 
@@ -749,6 +785,7 @@
       </div>
 
       <!-- ==== CÓDIGO DE COLORES ==== -->
+
       <div id="section-resist" class="section">
         <h2>Calculadora de Resistencias por Código de Colores</h2>
         <h2>Calcular desde Bandas</h2>
@@ -837,6 +874,7 @@
         <div id="selectores" class="grid"></div>
         <svg class="resistor-svg" viewBox="0 0 300 100" id="resistorSVG">
           <!-- 🔸 Terminales metálicas -->
+
           <rect
             x="20"
             y="45"
@@ -855,6 +893,7 @@
           />
 
           <!-- 🔸 Cuerpo principal del resistor (sin borde aún) -->
+
           <rect
             x="50"
             y="30"
@@ -866,6 +905,7 @@
           />
 
           <!-- 🔸 Bandas de color dinámicas (rellenadas por JS) -->
+
           <rect
             class="resistor-band"
             x="70"
@@ -922,6 +962,7 @@
           />
 
           <!-- 🔸 Borde superior (por encima de las bandas) -->
+
           <rect
             x="50"
             y="30"
@@ -935,8 +976,10 @@
           />
 
           <!-- 🔸 Definición de gradientes -->
+
           <defs>
             <!-- Cuerpo del resistor -->
+
             <linearGradient id="resistorBody" x1="0" x2="1" y1="0" y2="1">
               <stop offset="0%" stop-color="#f9e8b3" />
               <stop offset="50%" stop-color="#f1d68a" />
@@ -944,6 +987,7 @@
             </linearGradient>
 
             <!-- Metal de las patas -->
+
             <linearGradient id="metalGradient" x1="0" x2="1" y1="0" y2="1">
               <stop offset="100%" stop-color="grey" />
             </linearGradient>
@@ -953,6 +997,7 @@
         <div class="result-section">
           <div class="value-box">
             <!-- Campos ocultos necesarios para el script -->
+
             <input
               id="valorResistencia"
               type="text"
@@ -990,8 +1035,6 @@
           <!-- === BLOQUE CALCULADORA DE BANDAS DESDE VALOR === -->
 
           <div>
-            <!-- === BLOQUE CALCULADORA DE BANDAS DESDE VALOR (aislado y con resistor independiente) === -->
-            <!-- === CALCULADORA DE BANDAS DESDE VALOR (con etiquetas de color) === -->
             <div
               id="calc-valor-resistencia"
               style="
@@ -1012,6 +1055,7 @@
               </p>
 
               <!-- Selector de cantidad de bandas -->
+
               <label for="bandasSelectorValor">Cantidad de bandas:</label>
               <select
                 id="bandasSelectorValor"
@@ -1023,6 +1067,7 @@
               </select>
 
               <!-- Campo de entrada -->
+
               <div
                 style="
                   margin-top: 10px;
@@ -1043,11 +1088,11 @@
                     border-radius: 6px;
                   "
                   onkeydown="
-      const k=event.key;
-      if(['Backspace','Tab','ArrowLeft','ArrowRight','Delete','Enter'].includes(k)||event.ctrlKey||event.metaKey)return;
-      if(!/[0-9.,]/.test(k))event.preventDefault();
-      if((k==='.'||k===',')&&/[.,]/.test(this.value))event.preventDefault();
-    "
+                     const k=event.key;
+                     if(['Backspace','Tab','ArrowLeft','ArrowRight','Delete','Enter'].includes(k)||event.ctrlKey||event.metaKey)return;
+                     if(!/[0-9.,]/.test(k))event.preventDefault();
+                     if((k==='.'||k===',')&&/[.,]/.test(this.value))event.preventDefault();
+                      "
                   oninput="this.value=this.value.replace(/,/g,'.');"
                 />
                 <select id="unidadInput" onchange="mostrarBandasDesdeValor()">
@@ -1066,6 +1111,7 @@
               </div>
 
               <!-- Resultado -->
+
               <div
                 id="resultadoValor"
                 style="
@@ -1080,6 +1126,7 @@
               </div>
 
               <!-- Dibujo SVG del resistor -->
+
               <div
                 style="display: flex; justify-content: center; margin-top: 20px"
               >
@@ -1090,8 +1137,11 @@
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <!-- Terminal izquierda -->
+
                   <rect x="0" y="45" width="60" height="10" fill="#999" />
+
                   <!-- Cuerpo -->
+
                   <rect
                     x="60"
                     y="30"
@@ -1103,12 +1153,15 @@
                     stroke="#c69c6d"
                     stroke-width="2"
                   />
+
                   <!-- Terminal derecha -->
+
                   <rect x="240" y="45" width="60" height="10" fill="#999" />
                 </svg>
               </div>
 
               <!-- Etiquetas debajo del resistor -->
+
               <div
                 id="bandasInfo"
                 style="
@@ -1251,11 +1304,13 @@
                   }
 
                   // 🔹 Conversión de unidad
+
                   if (unidad === "kΩ") valor *= 1e3;
                   else if (unidad === "MΩ") valor *= 1e6;
                   else if (unidad === "GΩ") valor *= 1e9;
 
                   // 🔹 Series E24 (4 bandas) y E96 (5/6 bandas)
+
                   const E24 = [
                     1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0,
                     3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1,
@@ -1275,10 +1330,12 @@
                   const serie = n <= 4 ? E24 : E96;
 
                   // 🔹 Encontrar base y exponente
+
                   const exponente = Math.floor(Math.log10(valor));
                   const base = valor / Math.pow(10, exponente);
 
                   // 🔹 Buscar valor más cercano en la serie
+
                   const baseAjustada = serie.reduce((prev, curr) =>
                     Math.abs(curr - base) < Math.abs(prev - base) ? curr : prev
                   );
@@ -1286,6 +1343,7 @@
                   const valorAjustado = baseAjustada * Math.pow(10, exponente);
 
                   // 🔹 Mostrar el valor ajustado
+
                   const formatValue = (v) => {
                     if (v >= 1e6) return (v / 1e6).toFixed(2) + " MΩ";
                     if (v >= 1e3) return (v / 1e3).toFixed(2) + " kΩ";
@@ -1298,6 +1356,7 @@
                   })</small>`;
 
                   // 🔹 Calcular cifras significativas y multiplicador
+
                   let valorCalc = valorAjustado;
                   let significativos = n === 4 ? 2 : 3;
                   let mult = 1;
@@ -1332,6 +1391,7 @@
                   );
 
                   // 🔹 Crear arreglo de bandas
+
                   const bandas =
                     n === 4
                       ? [
@@ -1430,6 +1490,7 @@
                         ];
 
                   // 🔹 Posiciones y render
+
                   const pos = {
                     4: [80, 110, 150, 190],
                     5: [75, 100, 125, 160, 190],
@@ -1452,10 +1513,10 @@
                     const div = document.createElement("div");
                     div.style.textAlign = "center";
                     div.innerHTML = `
-      <div style="background:${b.hex};width:40px;height:10px;margin:0 auto;border-radius:2px;"></div>
-      <strong>${b.tipo}</strong><br>
-      <span>${b.nombre}</span><br>
-      <small>${b.desc}</small>`;
+                      <div style="background:${b.hex};width:40px;height:10px;margin:0 auto;border-radius:2px;"></div>
+                      <strong>${b.tipo}</strong><br>
+                      <span>${b.nombre}</span><br>
+                      <small>${b.desc}</small>`;
                     div.style.color = "#000";
                     div.style.background = "#fff";
                     div.style.padding = "6px 10px";
@@ -1499,7 +1560,9 @@
           </div>
         </div>
       </div>
+
       <!-- ==== FOOTER ==== -->
+
       <footer class="footer">
         <p>
           CD Electrónica Argentina ® es una marca registrada. Todos los derechos
@@ -1528,28 +1591,32 @@
     </div>
 
     <script>
-      /* ==== Navegación ==== */
-      /* ==== Navegación con guardado de estado ==== */
-      /* ==== Navegación con guardado y cierre suave ==== */
+      /* ==== Navegación, con guardado de estado y con cierre suave ==== */
+
       function showSection(name) {
         // Ocultar todas las secciones
+
         document
           .querySelectorAll(".section")
           .forEach((s) => s.classList.remove("active"));
 
         // Quitar clase "active" de los botones
+
         document
           .querySelectorAll(".header button")
           .forEach((b) => b.classList.remove("active"));
 
         // Activar la sección seleccionada
+
         document.getElementById("section-" + name).classList.add("active");
         document.getElementById("btn-" + name).classList.add("active");
 
         // 🔹 Guardar la última sección seleccionada
+
         localStorage.setItem("seccionActiva", name);
 
         // 🔹 Cerrar el menú hamburguesa con animación si está abierto
+
         const nav = document.getElementById("nav-links");
         if (nav.classList.contains("show")) {
           nav.classList.add("fade-out");
@@ -1560,6 +1627,7 @@
       }
 
       /* ==== Menú hamburguesa ==== */
+
       function toggleMenu() {
         const nav = document.getElementById("nav-links");
         if (nav.classList.contains("show")) {
@@ -1573,6 +1641,7 @@
       }
 
       /* ==== Restaurar última sección al cargar ==== */
+
       window.addEventListener("DOMContentLoaded", () => {
         const guardada = localStorage.getItem("seccionActiva");
         const inicial = guardada ? guardada : "ohm"; // por defecto "Ley de Ohm"
@@ -1580,6 +1649,7 @@
       });
 
       /* ==== Ley de Ohm ==== */
+
       function calcularOhm() {
         const voltajeInput = document.getElementById("voltaje");
         const corrienteInput = document.getElementById("corriente");
@@ -1593,6 +1663,7 @@
         let P = parseFloat(potenciaInput.value);
 
         // === Cálculos ===
+
         if (!isNaN(V) && !isNaN(I)) R = V / I;
         if (!isNaN(V) && !isNaN(R)) I = V / R;
         if (!isNaN(I) && !isNaN(R)) V = I * R;
@@ -1602,6 +1673,7 @@
         else if (!isNaN(V) && !isNaN(R)) P = (V * V) / R;
 
         // === Formateo de valores con texto ===
+
         const formatValue = (value, unit) => {
           if (isNaN(value)) return "";
           let val = value,
@@ -1628,6 +1700,7 @@
         };
 
         // === Crear resumen textual ===
+
         const resumen = [];
         if (!isNaN(V)) resumen.push(`Voltaje: ${formatValue(V, "V")}`);
         if (!isNaN(I)) resumen.push(`Corriente: ${formatValue(I, "A")}`);
@@ -1635,6 +1708,7 @@
         if (!isNaN(P)) resumen.push(`Potencia: ${formatValue(P, "W")}`);
 
         // === Mostrar resultado ===
+
         if (resumen.length > 0) {
           div.innerHTML = `<strong>Resultado:</strong><br>${resumen.join(
             "<br>"
@@ -1646,6 +1720,7 @@
       }
 
       // === Función separada para el botón “Restablecer” ===
+
       function resetearOhm() {
         document.querySelectorAll("#section-ohm input").forEach((input) => {
           input.value = "";
@@ -1657,6 +1732,7 @@
       }
 
       /* ==== Potencia ==== */
+
       function actualizarCampos() {
         const f = formula.value;
         if (f === "P=V*I") {
@@ -1695,6 +1771,7 @@
         if (f === "P=V2R") P = v1 ** 2 / v2;
 
         // 🔹 Conversión a nomenclatura
+
         const formatValue = (value) => {
           let unidad = "W";
           let val = value;
@@ -1725,6 +1802,7 @@
       }
 
       /* ==== DIVISOR ==== */
+
       function actualizarDivisorCampos() {
         const tipo = document.getElementById("tipoDivisor").value;
         const label = document.getElementById("labelDiv1");
@@ -1776,6 +1854,7 @@
       }
 
       /* ==== SOLAPA RESISTENCIAS ==== */
+
       function calcularResistencias() {
         sincronizarResistencias();
 
@@ -1827,11 +1906,13 @@
         }
 
         // si es menor a 0.001 Ω
+
         return `${(valor * 1e6).toFixed(2)} µΩ`;
       }
 
       function resetearResistencias() {
         // 🔄 borra todos los casilleros y deja solo uno
+
         const container = document.getElementById("resistenciasContainer");
         container.innerHTML = `
     <div class="res-item">
@@ -1842,6 +1923,7 @@
         //  fin de calculos Resistencias //
 
         // limpia el input oculto y el resultado
+
         document.getElementById("resistenciasInput").value = "";
         document.getElementById("resultadoResistencias").textContent =
           "Resultado: —";
@@ -1852,12 +1934,14 @@
       let escribiendo = false;
 
       // 🧠 Manejador para cuando escribís manualmente
+
       inputResistencia.addEventListener("input", function (e) {
         if (bloqueadoPorSistema) return;
 
         escribiendo = true;
 
         // Permitir coma o punto indistintamente
+
         let value = e.target.value.replace(/,/g, ".");
         const regex = /^[0-9]*[.,]?[0-9]*$/;
         if (!regex.test(value)) {
@@ -1866,6 +1950,7 @@
         }
 
         // No forzar redondeo ni formato mientras escribís
+
         if (value === "" || value === "." || value === ",") return;
 
         const num = parseFloat(value);
@@ -1876,6 +1961,7 @@
 
       inputResistencia.addEventListener("blur", () => {
         // Al salir del input, ahora sí formateamos y redondeamos
+
         const v = parseFloat(inputResistencia.value.replace(",", "."));
         if (!isNaN(v)) {
           const u = unidad.value;
@@ -1893,6 +1979,7 @@
       });
 
       // ✅ Función estable para actualizar texto desde el sistema
+
       function actualizarTexto() {
         if (escribiendo) return; // si estás escribiendo, no tocar
 
@@ -1913,6 +2000,7 @@
         }
 
         // 🔸 Formateo seguro (no redondea ni altera mientras escribís)
+
         const campo = document.getElementById("valorResistencia");
         campo.value = v.toString().replace(".", ",");
         unidad.value = u;
@@ -1929,6 +2017,7 @@
 
       /* ==== Código de Colores ==== */
       // ==== Tabla de colores ====
+
       const colores = [
         {
           nombre: "Negro",
@@ -2034,6 +2123,7 @@
         tcrFinal = null;
 
       // ==== Cambiar cantidad de bandas ====
+
       function setBandas(n) {
         cantBandas = n;
         document
@@ -2046,6 +2136,7 @@
       }
 
       // ==== Generar los selects dinámicamente ====
+
       function generarSelectores() {
         const cont = document.getElementById("selectores");
         cont.innerHTML = "";
@@ -2090,6 +2181,7 @@
       }
 
       // ==== Dibujar el resistor ====
+
       function generarSVG() {
         const svg = document.getElementById("resistorSVG");
         svg.querySelectorAll(".resistor-band").forEach((b) => b.remove());
@@ -2115,6 +2207,7 @@
       }
 
       // ==== Calcular valor según los colores seleccionados ====
+
       function actualizarResistencia() {
         const valores = [];
         for (let i = 1; i <= cantBandas; i++) {
@@ -2155,6 +2248,7 @@
       }
 
       // ==== Mostrar el valor calculado ====
+
       function actualizarTexto() {
         let v = valorFinal,
           u = "Ω";
@@ -2183,17 +2277,21 @@
       }
 
       // ==== Calcular colores a partir de un valor manual ====
+
       function calcularBandasDesdeValor() {
         let v = parseFloat(valorResistencia.value);
         if (isNaN(v)) return;
 
         const u = unidad.value;
+
         // Convertir a ohmios
+
         if (u === "kΩ") v *= 1e3;
         else if (u === "MΩ") v *= 1e6;
         else if (u === "GΩ") v *= 1e9;
 
         // Lista de multiplicadores disponibles
+
         const multiplicadores = colores
           .filter((c) => c.mult && c.valor !== null)
           .map((c) => c.mult)
@@ -2203,11 +2301,13 @@
           colorMult = null;
 
         // Buscar el multiplicador adecuado según cantidad de dígitos
+
         for (const m of multiplicadores) {
           const d = v / m;
 
           if (cantBandas === 4) {
             // 2 dígitos válidos
+
             if (d >= 10 && d < 100) {
               mult = m;
               colorMult = colores.find((c) => c.mult === m);
@@ -2215,6 +2315,7 @@
             }
           } else {
             // 3 dígitos válidos
+
             if (d >= 100 && d < 1000) {
               mult = m;
               colorMult = colores.find((c) => c.mult === m);
@@ -2224,8 +2325,10 @@
         }
 
         // Si no encontró ninguno (valores muy chicos o grandes)
+
         if (!colorMult) {
           // Buscar el multiplicador más cercano posible
+
           let mCercano = multiplicadores[0];
           for (const m of multiplicadores) {
             if (Math.abs(v / m - 10) < Math.abs(v / mCercano - 10)) {
@@ -2237,6 +2340,7 @@
         }
 
         // Calcular dígitos significativos
+
         const digitos = Math.round(v / mult);
         const d1 = Math.floor(digitos / (cantBandas > 4 ? 100 : 10)) % 10;
         const d2 = Math.floor(digitos / (cantBandas > 4 ? 10 : 1)) % 10;
@@ -2247,15 +2351,18 @@
         const c3 = cantBandas > 4 ? colores.find((c) => c.valor === d3) : null;
 
         // Tolerancia y TCR por defecto
+
         const cTol = colores.find((c) => c.nombre === "Dorado"); // ±5%
         const cTcr = colores.find((c) => c.tcr === 100); // Marrón = 100 ppm/K
 
         // Limpiar selects previos
+
         document
           .querySelectorAll("#selectores select")
           .forEach((s) => (s.value = ""));
 
         // Asignar colores según cantidad de bandas
+
         if (c1) document.getElementById("b1").value = c1.nombre;
         if (c2) document.getElementById("b2").value = c2.nombre;
 
@@ -2277,11 +2384,13 @@
       }
 
       // ==== Cambiar unidad manualmente ====
+
       function actualizarUnidad() {
         calcularBandasDesdeValor();
       }
 
       // ==== Reset ====
+
       function resetCalc() {
         document
           .querySelectorAll("#selectores select")
@@ -2295,6 +2404,7 @@
       }
 
       // ==== Inicializar ====
+
       generarSelectores();
       generarSVG();
     </script>
@@ -2328,34 +2438,5 @@
         hiddenInput.value = valores;
       }
     </script>
-
-    <style>
-      #resistenciasContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-bottom: 8px;
-      }
-
-      .resInput {
-        width: 120px;
-        padding: 6px;
-      }
-
-      #addResBtn {
-        background-color: #0096b2;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 5px 10px;
-        font-size: 18px;
-        cursor: pointer;
-        margin-bottom: 10px;
-      }
-
-      #addResBtn:hover {
-        background-color: #00bcd4;
-      }
-    </style>
   </body>
 </html>
