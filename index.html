@@ -444,7 +444,7 @@
         <label>Voltaje (V)</label>
         <div class="input-group">
           <input
-            type="text"
+            type="number"
             id="voltaje"
             placeholder="Ingresar voltaje..."
           /><span class="unit">V</span>
@@ -483,7 +483,27 @@
           </button>
         </div>
         <div id="resultadoOhm" class="resultado-ohm"></div>
+        <br />
+
         <h3>Ley de Ohm</h3>
+        <div
+          style="
+            text-align: center;
+            margin-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <img
+            src="./Ley de ohm.png"
+            alt="Ley de Ohm - Diagrama ilustrativo"
+            style="
+              max-width: 300px;
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+            "
+          />
+        </div>
         <p>
           La Ley de Ohm es la relación fundamental entre
           <strong>tensión (V)</strong>, <strong>corriente (I)</strong> y
@@ -592,10 +612,25 @@
         <h2>Calculadora de Divisor</h2>
 
         <label>Tipo de divisor:</label>
-        <select id="tipoDivisor" onchange="actualizarDivisorCampos()">
+        <select id="tipoDivisor" onchange="actualizarImagenDivisor(this.value)">
           <option value="tension">Tensión</option>
           <option value="corriente">Corriente</option>
         </select>
+
+        <!-- Imagen dinámica -->
+        <div id="imagenDivisor" style="text-align: center; margin: 1rem 0">
+          <img
+            id="imgDivisor"
+            src="./Formula Divisor Tension.png"
+            alt="Diagrama divisor de tensión"
+            style="
+              max-width: 300px;
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+            "
+          />
+        </div>
 
         <label id="labelDiv1">Voltaje total (V)</label>
         <div class="input-group">
@@ -606,6 +641,7 @@
           />
           <span class="unit" id="unidadDiv1">V</span>
         </div>
+
         <br />
 
         <div
@@ -760,7 +796,43 @@
           depende de cómo estén asociadas.
         </p>
 
+        <br />
+
         <p><strong>Conexión en serie:</strong></p>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            text-align: center;
+          "
+        >
+          <img
+            src="./Formula resistencia Serie 1.png"
+            alt="Fórmula de Resistencia en Serie - Diagrama 1"
+            style="
+              max-width: 300px;
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+              flex: 1 1 300px;
+            "
+          />
+          <img
+            src="./Formula resistencia Serie 2.png"
+            alt="Fórmula de Resistencia en Serie - Diagrama 2"
+            style="
+              max-width: 300px;
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+              flex: 1 1 300px;
+            "
+          />
+        </div>
         <ul>
           <li><code>Rtotal = R1 + R2 + R3 + ...</code></li>
           <li>
@@ -768,8 +840,43 @@
             se reparte entre ellas.
           </li>
         </ul>
+        <br />
 
         <p><strong>Conexión en paralelo:</strong></p>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            text-align: center;
+          "
+        >
+          <img
+            src="./Formula Resistencia Paralelo 1.jpg"
+            alt="Fórmula de Resistencia en Paralelo - Diagrama 1"
+            style="
+              max-width: 300px;
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+              flex: 1 1 300px;
+            "
+          />
+          <img
+            src="./Formula Resistencia Paralelo 2.png"
+            alt="Fórmula de Resistencia en Paralelo - Diagrama 2"
+            style="
+              max-width: 300px;
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+              flex: 1 1 300px;
+            "
+          />
+        </div>
         <ul>
           <li><code>1 / Rtotal = 1 / R1 + 1 / R2 + 1 / R3 + ...</code></li>
           <li>
@@ -1383,12 +1490,26 @@
                     );
                   }
 
-                  const cTol = coloresBandasValor.find(
-                    (c) => c.nombre === "Dorado"
-                  );
-                  const cTcr = coloresBandasValor.find(
-                    (c) => c.nombre === "Marrón"
-                  );
+                  let cTol;
+                  let cTcr;
+
+                  if (n === 4) {
+                    // Resistencias estándar
+                    cTol = coloresBandasValor.find(
+                      (c) => c.nombre === "Dorado"
+                    ); // ±5%
+                  } else if (n === 5) {
+                    // Resistencias de precisión
+                    cTol = coloresBandasValor.find(
+                      (c) => c.nombre === "Marrón"
+                    ); // ±1%
+                  } else if (n === 6) {
+                    // Resistencias de alta precisión
+                    cTol = coloresBandasValor.find(
+                      (c) => c.nombre === "Marrón"
+                    ); // ±1%
+                    cTcr = coloresBandasValor.find((c) => c.tcr === 100); // Marrón = 100 ppm/K
+                  }
 
                   // 🔹 Crear arreglo de bandas
 
@@ -1843,7 +1964,7 @@
 
         document.getElementById(
           "resultadoDiv"
-        ).textContent = `Resultado: ${resultado.toFixed(3)} ${unidad}`;
+        ).textContent = `Resultado: ${resultado.toFixed(2)} ${unidad}`;
       }
 
       function resetearDivisor() {
@@ -2169,12 +2290,67 @@
           l.textContent = text;
           const s = document.createElement("select");
           s.id = "b" + (i + 1);
-          s.innerHTML =
-            `<option value="">Seleccione un color</option>` +
-            colores
-              .map((c) => `<option value="${c.nombre}">${c.nombre}</option>`)
+
+          // === Determinar tipo de banda según posición y cantidad ===
+          let tipo = "";
+          if (cantBandas === 4) tipo = ["valor", "valor", "mult", "tol"][i];
+          else if (cantBandas === 5)
+            tipo = ["valor", "valor", "valor", "mult", "tol"][i];
+          else if (cantBandas === 6)
+            tipo = ["valor", "valor", "valor", "mult", "tol", "tcr"][i];
+
+          // === Función para formatear el multiplicador ===
+          const formatMult = (m) => {
+            if (m >= 1e9) return "×1G";
+            if (m >= 1e6) return `×${m / 1e6}M`;
+            if (m >= 1e3) return `×${m / 1e3}k`;
+            if (m < 1 && m >= 0.001) return `×${m * 1000}m`;
+            if (m < 0.001 && m >= 0.000001) return `×${m * 1e6}µ`;
+            return "×" + m;
+          };
+
+          // === Construcción de opciones ===
+          let opciones = `<option value="" disabled selected hidden>Seleccione un color</option>`;
+
+          if (tipo === "valor") {
+            opciones += coloresBandasValor
+              .filter((c) => c.valor !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (${c.valor})</option>`
+              )
               .join("");
+          } else if (tipo === "mult") {
+            opciones += coloresBandasValor
+              .filter((c) => c.mult !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (${formatMult(
+                    c.mult
+                  )})</option>`
+              )
+              .join("");
+          } else if (tipo === "tol") {
+            opciones += coloresBandasValor
+              .filter((c) => c.tol !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (±${c.tol}%)</option>`
+              )
+              .join("");
+          } else if (tipo === "tcr") {
+            opciones += coloresBandasValor
+              .filter((c) => c.tcr !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (${c.tcr} ppm/K)</option>`
+              )
+              .join("");
+          }
+
+          s.innerHTML = opciones;
           s.onchange = actualizarResistencia;
+
           cont.appendChild(l);
           cont.appendChild(s);
         });
@@ -2204,6 +2380,20 @@
           r.id = "band" + (i + 1);
           svg.appendChild(r);
         });
+      }
+
+      // funcion par img dinamicas de divisor //
+
+      function actualizarImagenDivisor(tipo) {
+        const img = document.getElementById("imgDivisor");
+
+        if (tipo === "tension") {
+          img.src = "./Formula Divisor Tension.png";
+          img.alt = "Diagrama divisor de tensión";
+        } else {
+          img.src = "./Formular divisor Corriente.png";
+          img.alt = "Diagrama divisor de corriente";
+        }
       }
 
       // ==== Calcular valor según los colores seleccionados ====
@@ -2280,6 +2470,9 @@
 
       function calcularBandasDesdeValor() {
         let v = parseFloat(valorResistencia.value);
+        const cantBandas = parseInt(
+          document.getElementById("bandasSelectorValor").value
+        );
         if (isNaN(v)) return;
 
         const u = unidad.value;
@@ -2352,8 +2545,20 @@
 
         // Tolerancia y TCR por defecto
 
-        const cTol = colores.find((c) => c.nombre === "Dorado"); // ±5%
-        const cTcr = colores.find((c) => c.tcr === 100); // Marrón = 100 ppm/K
+        let cTol;
+        let cTcr;
+
+        if (cantBandas === 4) {
+          // Resistencias estándar
+          cTol = colores.find((c) => c.nombre === "Dorado"); // ±5%
+        } else if (cantBandas === 5) {
+          // Resistencias de precisión
+          cTol = colores.find((c) => c.nombre === "Marrón"); // ±1%
+        } else if (cantBandas === 6) {
+          // Resistencias de alta precisión
+          cTol = colores.find((c) => c.nombre === "Marrón"); // ±1%
+          cTcr = colores.find((c) => c.nombre === "Verde"); // 50 ppm/K
+        }
 
         // Limpiar selects previos
 
