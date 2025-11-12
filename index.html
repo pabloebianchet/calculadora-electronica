@@ -2147,10 +2147,10 @@
 
         const container = document.getElementById("resistenciasContainer");
         container.innerHTML = `
-    <div class="res-item">
-      <input type="number" class="resInput" placeholder="Ej: 100" />
-    </div>
-  `;
+        <div class="res-item">
+          <input type="number" class="resInput" placeholder="Ej: 100" />
+        </div>
+      `;
 
         //  fin de calculos Resistencias //
 
@@ -2369,110 +2369,9 @@
         resetCalc();
       }
 
-      // ==== Generar los selects dinámicamente ====
-
-      // function generarSelectores() {
-      //   const cont = document.getElementById("selectores");
-      //   cont.innerHTML = "";
-      //   const etiquetas = {
-      //     4: [
-      //       "1.ª banda de color",
-      //       "2.ª banda de color",
-      //       "Multiplicador",
-      //       "Tolerancia",
-      //     ],
-      //     5: [
-      //       "1.ª banda de color",
-      //       "2.ª banda de color",
-      //       "3.ª banda de color",
-      //       "Multiplicador",
-      //       "Tolerancia",
-      //     ],
-      //     6: [
-      //       "1.ª banda de color",
-      //       "2.ª banda de color",
-      //       "3.ª banda de color",
-      //       "Multiplicador",
-      //       "Tolerancia",
-      //       "Coeficiente TCR",
-      //     ],
-      //   };
-
-      //   etiquetas[cantBandas].forEach((text, i) => {
-      //     const l = document.createElement("label");
-      //     l.textContent = text;
-      //     const s = document.createElement("select");
-      //     s.id = "b" + (i + 1);
-
-      //     // === Determinar tipo de banda según posición y cantidad ===
-      //     let tipo = "";
-      //     if (cantBandas === 4) tipo = ["valor", "valor", "mult", "tol"][i];
-      //     else if (cantBandas === 5)
-      //       tipo = ["valor", "valor", "valor", "mult", "tol"][i];
-      //     else if (cantBandas === 6)
-      //       tipo = ["valor", "valor", "valor", "mult", "tol", "tcr"][i];
-
-      //     // === Función para formatear el multiplicador ===
-      //     const formatMult = (m) => {
-      //       if (m >= 1e9) return "×1G";
-      //       if (m >= 1e6) return `×${m / 1e6}M`;
-      //       if (m >= 1e3) return `×${m / 1e3}k`;
-      //       if (m < 1 && m >= 0.001) return `×${m * 1000}m`;
-      //       if (m < 0.001 && m >= 0.000001) return `×${m * 1e6}µ`;
-      //       return "×" + m;
-      //     };
-
-      //     // === Construcción de opciones ===
-      //     let opciones = `<option value="" disabled selected hidden>Seleccione un color</option>`;
-
-      //     if (tipo === "valor") {
-      //       opciones += coloresBandasValor
-      //         .filter((c) => c.valor !== null)
-      //         .map(
-      //           (c) =>
-      //             `<option value="${c.nombre}">${c.nombre} (${c.valor})</option>`
-      //         )
-      //         .join("");
-      //     } else if (tipo === "mult") {
-      //       opciones += coloresBandasValor
-      //         .filter((c) => c.mult !== null)
-      //         .map(
-      //           (c) =>
-      //             `<option value="${c.nombre}">${c.nombre} (${formatMult(
-      //               c.mult
-      //             )})</option>`
-      //         )
-      //         .join("");
-      //     } else if (tipo === "tol") {
-      //       opciones += coloresBandasValor
-      //         .filter((c) => c.tol !== null)
-      //         .map(
-      //           (c) =>
-      //             `<option value="${c.nombre}">${c.nombre} (±${c.tol}%)</option>`
-      //         )
-      //         .join("");
-      //     } else if (tipo === "tcr") {
-      //       opciones += coloresBandasValor
-      //         .filter((c) => c.tcr !== null)
-      //         .map(
-      //           (c) =>
-      //             `<option value="${c.nombre}">${c.nombre} (${c.tcr} ppm/K)</option>`
-      //         )
-      //         .join("");
-      //     }
-
-      //     s.innerHTML = opciones;
-      //     s.onchange = actualizarResistencia;
-
-      //     cont.appendChild(l);
-      //     cont.appendChild(s);
-      //   });
-      // }
-
       function generarSelectores() {
         const cont = document.getElementById("selectores");
         cont.innerHTML = "";
-
         const etiquetas = {
           4: [
             "1.ª banda de color",
@@ -2497,46 +2396,143 @@
           ],
         };
 
-        // ✅ Si existe el selector de bandas del bloque "Calcular desde valor", úsalo
-        // sino usa la variable global cantBandas
-        const nSelect = document.getElementById("bandasSelectorValor");
-        const n = nSelect ? parseInt(nSelect.value) : cantBandas;
+        etiquetas[cantBandas].forEach((text, i) => {
+          const l = document.createElement("label");
+          l.textContent = text;
+          const s = document.createElement("select");
+          s.id = "b" + (i + 1);
 
-        const listaEtiquetas = etiquetas[n];
+          // === Determinar tipo de banda según posición y cantidad ===
+          let tipo = "";
+          if (cantBandas === 4) tipo = ["valor", "valor", "mult", "tol"][i];
+          else if (cantBandas === 5)
+            tipo = ["valor", "valor", "valor", "mult", "tol"][i];
+          else if (cantBandas === 6)
+            tipo = ["valor", "valor", "valor", "mult", "tol", "tcr"][i];
 
-        listaEtiquetas.forEach((et, i) => {
-          const div = document.createElement("div");
-          const label = document.createElement("label");
-          label.textContent = et;
+          // === Función para formatear el multiplicador ===
+          const formatMult = (m) => {
+            if (m >= 1e9) return "×1G";
+            if (m >= 1e6) return `×${m / 1e6}M`;
+            if (m >= 1e3) return `×${m / 1e3}k`;
+            if (m < 1 && m >= 0.001) return `×${m * 1000}m`;
+            if (m < 0.001 && m >= 0.000001) return `×${m * 1e6}µ`;
+            return "×" + m;
+          };
 
-          const select = document.createElement("select");
-          select.id = "b" + (i + 1);
+          // === Construcción de opciones ===
+          let opciones = `<option value="" disabled selected hidden>Seleccione un color</option>`;
 
-          let lista = [];
-          if (et.includes("Multiplicador")) {
-            lista = colores.filter((c) => c.mult);
-          } else if (et.includes("Tolerancia")) {
-            lista = colores.filter((c) => c.tol !== null);
-          } else if (et.includes("TCR")) {
-            lista = colores.filter((c) => c.tcr !== null);
-          } else {
-            lista = colores.filter((c) => c.valor !== null);
+          if (tipo === "valor") {
+            opciones += coloresBandasValor
+              .filter((c) => c.valor !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (${c.valor})</option>`
+              )
+              .join("");
+          } else if (tipo === "mult") {
+            opciones += coloresBandasValor
+              .filter((c) => c.mult !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (${formatMult(
+                    c.mult
+                  )})</option>`
+              )
+              .join("");
+          } else if (tipo === "tol") {
+            opciones += coloresBandasValor
+              .filter((c) => c.tol !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (±${c.tol}%)</option>`
+              )
+              .join("");
+          } else if (tipo === "tcr") {
+            opciones += coloresBandasValor
+              .filter((c) => c.tcr !== null)
+              .map(
+                (c) =>
+                  `<option value="${c.nombre}">${c.nombre} (${c.tcr} ppm/K)</option>`
+              )
+              .join("");
           }
 
-          lista.forEach((c) => {
-            const opt = document.createElement("option");
-            opt.value = c.nombre;
-            opt.textContent = c.nombre;
-            opt.style.backgroundColor = c.hex;
-            opt.style.color = getContraste(c.hex);
-            select.appendChild(opt);
-          });
+          s.innerHTML = opciones;
+          s.onchange = actualizarResistencia;
 
-          div.appendChild(label);
-          div.appendChild(select);
-          cont.appendChild(div);
+          cont.appendChild(l);
+          cont.appendChild(s);
         });
       }
+
+      // function generarSelectores() {
+      //   const cont = document.getElementById("selectores");
+      //   cont.innerHTML = "";
+
+      //   const etiquetas = {
+      //     4: [
+      //       "1.ª banda de color",
+      //       "2.ª banda de color",
+      //       "Multiplicador",
+      //       "Tolerancia",
+      //     ],
+      //     5: [
+      //       "1.ª banda de color",
+      //       "2.ª banda de color",
+      //       "3.ª banda de color",
+      //       "Multiplicador",
+      //       "Tolerancia",
+      //     ],
+      //     6: [
+      //       "1.ª banda de color",
+      //       "2.ª banda de color",
+      //       "3.ª banda de color",
+      //       "Multiplicador",
+      //       "Tolerancia",
+      //       "Coeficiente TCR",
+      //     ],
+      //   };
+
+      //   const cantBandas = parseInt(
+      //     document.getElementById("bandasSelectorValor").value
+      //   );
+      //   const listaEtiquetas = etiquetas[cantBandas];
+
+      //   listaEtiquetas.forEach((et, i) => {
+      //     const div = document.createElement("div");
+      //     const label = document.createElement("label");
+      //     label.textContent = et;
+
+      //     const select = document.createElement("select");
+      //     select.id = "b" + (i + 1);
+
+      //     let lista = [];
+      //     if (et.includes("Multiplicador")) {
+      //       lista = coloresBandasValor.filter((c) => c.mult);
+      //     } else if (et.includes("Tolerancia")) {
+      //       lista = coloresBandasValor.filter((c) => c.tol !== null);
+      //     } else if (et.includes("TCR")) {
+      //       lista = coloresBandasValor.filter((c) => c.tcr !== null);
+      //     } else {
+      //       lista = coloresBandasValor.filter((c) => c.valor !== null);
+      //     }
+
+      //     lista.forEach((c) => {
+      //       const opt = document.createElement("option");
+      //       opt.value = c.nombre;
+      //       opt.textContent = c.nombre;
+      //       opt.style.backgroundColor = c.hex;
+      //       opt.style.color = getContraste(c.hex);
+      //       select.appendChild(opt);
+      //     });
+
+      //     div.appendChild(label);
+      //     div.appendChild(select);
+      //     cont.appendChild(div);
+      //   });
+      // }
 
       // === Función auxiliar para contraste de texto ===
       function getContraste(hex) {
