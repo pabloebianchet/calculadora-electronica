@@ -2436,10 +2436,35 @@
             lista = coloresBandasValor.filter((c) => c.valor !== null);
           else if (tipo === "mult")
             lista = coloresBandasValor.filter((c) => c.mult !== null);
-          else if (tipo === "tol")
-            lista = coloresBandasValor.filter((c) => c.tol !== null);
-          else if (tipo === "tcr")
-            lista = coloresBandasValor.filter((c) => c.tcr !== null);
+          else if (tipo === "tol") {
+            lista = coloresBandasValor.filter((c) => {
+              if (cantBandas === 4) {
+                // En resistencias de 4 bandas se permiten todos los colores de tolerancia
+                return c.tol !== null;
+              } else {
+                // En 5 y 6 bandas se excluyen Naranja y Amarillo
+                return (
+                  c.tol !== null &&
+                  c.nombre !== "Naranja" &&
+                  c.nombre !== "Amarillo"
+                );
+              }
+            });
+          } else if (tipo === "tcr") {
+            // Solo mostrar los colores válidos para coeficiente TCR en 6 bandas
+            const coloresValidosTCR = [
+              "Marrón",
+              "Rojo",
+              "Naranja",
+              "Amarillo",
+              "Azul",
+              "Violeta",
+            ];
+
+            lista = coloresBandasValor.filter(
+              (c) => c.tcr !== null && coloresValidosTCR.includes(c.nombre)
+            );
+          }
 
           // === Crear las opciones coloreadas ===
           lista.forEach((c) => {
