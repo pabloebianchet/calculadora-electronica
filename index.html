@@ -11,6 +11,39 @@
 
     <!-- Estilos -->
     <style>
+      /* === Colores por opción === */
+      #toleranciaManual option[value="Dorado"] {
+        background-color: #d4af37;
+        color: #000;
+      }
+      #toleranciaManual option[value="Plateado"] {
+        background-color: #c0c0c0;
+        color: #000;
+      }
+      #toleranciaManual option[value="Marrón"] {
+        background-color: #4b2e1e;
+        color: #fff;
+      }
+      #toleranciaManual option[value="Rojo"] {
+        background-color: #ff0000;
+        color: #fff;
+      }
+      #toleranciaManual option[value="Verde"] {
+        background-color: #008000;
+        color: #fff;
+      }
+      #toleranciaManual option[value="Azul"] {
+        background-color: #0000ff;
+        color: #fff;
+      }
+      #toleranciaManual option[value="Violeta"] {
+        background-color: #8b00ff;
+        color: #fff;
+      }
+      #toleranciaManual option[value="Gris"] {
+        background-color: #808080;
+        color: #fff;
+      }
       * {
         box-sizing: border-box;
         font-family: "Nunito", sans-serif !important;
@@ -1173,6 +1206,63 @@
                 <option value="6">6 bandas</option>
               </select>
 
+              <label for="toleranciaManual">Tolerancia</label>
+              <select id="toleranciaManual">
+                <option value="Dorado">±5%</option>
+                <option value="Plateado">±10%</option>
+                <option value="Marrón">±1%</option>
+                <option value="Rojo">±2%</option>
+                <option value="Verde">±0.5%</option>
+                <option value="Azul">±0.25%</option>
+                <option value="Violeta">±0.1%</option>
+                <option value="Gris">±0.05%</option></select
+              ><br />
+
+              <div id="ppmContainer" style="display: none">
+                <label for="ppmManual">Coeficiente TCR (ppm/K)</label>
+                <select id="ppmManual">
+                  <option value="" disabled selected hidden>
+                    Seleccione un color
+                  </option>
+                  <option
+                    value="Marrón"
+                    style="background: #4b2e1e; color: white"
+                  >
+                    Marrón — 100 ppm/K
+                  </option>
+                  <option
+                    value="Rojo"
+                    style="background: #ff0000; color: white"
+                  >
+                    Rojo — 50 ppm/K
+                  </option>
+                  <option
+                    value="Naranja"
+                    style="background: #ff7f00; color: black"
+                  >
+                    Naranja — 15 ppm/K
+                  </option>
+                  <option
+                    value="Amarillo"
+                    style="background: #ffff00; color: black"
+                  >
+                    Amarillo — 25 ppm/K
+                  </option>
+                  <option
+                    value="Azul"
+                    style="background: #0000ff; color: white"
+                  >
+                    Azul — 10 ppm/K
+                  </option>
+                  <option
+                    value="Violeta"
+                    style="background: #8b00ff; color: white"
+                  >
+                    Violeta — 5 ppm/K
+                  </option>
+                </select>
+              </div>
+
               <!-- Campo de entrada -->
 
               <div
@@ -1329,7 +1419,7 @@
                     valor: 5,
                     mult: 1e5,
                     tol: 0.5,
-                    tcr: null,
+                    tcr: 50,
                     hex: "#008000",
                   },
                   {
@@ -1393,7 +1483,9 @@
                   const resultado = document.getElementById("resultadoValor");
                   const svg = document.getElementById("resistorSVG_valor");
                   const info = document.getElementById("bandasInfo");
-
+                  // 🔹 Mostrar u ocultar el selector de PPM (TCR)
+                  const ppmDiv = document.getElementById("ppmContainer");
+                  ppmDiv.style.display = n === 6 ? "block" : "none";
                   svg
                     .querySelectorAll(".resistor-band")
                     .forEach((b) => b.remove());
@@ -1443,14 +1535,17 @@
 
                   // 🔹 Buscar valor más cercano en la serie
 
-                  const baseAjustada = serie.reduce((prev, curr) =>
-                    Math.abs(curr - base) < Math.abs(prev - base) ? curr : prev
-                  );
+                  // const baseAjustada = serie.reduce((prev, curr) =>
+                  //   Math.abs(curr - base) < Math.abs(prev - base) ? curr : prev
+                  // );
 
-                  const valorAjustado = baseAjustada * Math.pow(10, exponente);
+                  // const valorAjustado = baseAjustada * Math.pow(10, exponente);
 
                   // 🔹 Mostrar el valor ajustado
 
+                  const valorAjustado = valor;
+
+                  // 🔹 Mostrar el valor exacto (sin normalización)
                   const formatValue = (v) => {
                     if (v >= 1e6) return (v / 1e6).toFixed(2) + " MΩ";
                     if (v >= 1e3) return (v / 1e3).toFixed(2) + " kΩ";
@@ -1458,27 +1553,43 @@
                   };
                   resultado.innerHTML = `${formatValue(
                     valorAjustado
-                  )} → ${n} bandas<br><small style="font-size:13px;color:#555;">(valor normalizado serie ${
-                    serie === E24 ? "E24" : "E96"
-                  })</small>`;
+                  )} → ${n} bandas`;
 
-                  // 🔹 Calcular cifras significativas y multiplicador
+                  // === Determinar cifras significativas y multiplicador (idéntico a DigiKey) ===
 
-                  let valorCalc = valorAjustado;
+                  // === Determinar cifras significativas y multiplicador (versión DigiKey) ===
                   let significativos = n === 4 ? 2 : 3;
                   let mult = 1;
+                  let valorCalc = valor;
 
-                  while (valorCalc >= Math.pow(10, significativos)) {
-                    valorCalc /= 10;
-                    mult *= 10;
+                  // 🔹 Normalización según el rango
+                  if (valor < 1) {
+                    // ejemplo: 0.47Ω → 47 × 0.01 (plateado)
+                    while (valorCalc < Math.pow(10, significativos - 1)) {
+                      valorCalc *= 10;
+                      mult /= 10;
+                    }
+                  } else if (valor < 10) {
+                    // ejemplo: 6.8Ω → 68 × 0.1 (dorado)
+                    valorCalc *= 10;
+                    mult = 0.1;
+                  } else {
+                    // ejemplo: 4700Ω → 47 × 100 (rojo)
+                    while (valorCalc >= Math.pow(10, significativos)) {
+                      valorCalc /= 10;
+                      mult *= 10;
+                    }
                   }
 
+                  // 🔹 Redondear y obtener los dígitos
                   const valorRedondeado = Math.round(valorCalc);
                   const numStr = valorRedondeado
                     .toString()
-                    .padStart(significativos, "0");
+                    .padStart(significativos, "0")
+                    .slice(0, significativos);
                   const digitos = numStr.split("").map(Number);
 
+                  // 🔹 Buscar color del multiplicador
                   let colorMult = coloresBandasValor.find(
                     (c) => c.mult === mult
                   );
@@ -1490,25 +1601,25 @@
                     );
                   }
 
-                  let cTol;
-                  let cTcr;
+                  // === Tolerancia y TCR ===
+                  // === Tolerancia y TCR ===
+                  let cTol, cTcr;
 
-                  if (n === 4) {
-                    // Resistencias estándar
-                    cTol = coloresBandasValor.find(
-                      (c) => c.nombre === "Dorado"
-                    ); // ±5%
-                  } else if (n === 5) {
-                    // Resistencias de precisión
-                    cTol = coloresBandasValor.find(
-                      (c) => c.nombre === "Marrón"
-                    ); // ±1%
-                  } else if (n === 6) {
-                    // Resistencias de alta precisión
-                    cTol = coloresBandasValor.find(
-                      (c) => c.nombre === "Marrón"
-                    ); // ±1%
-                    cTcr = coloresBandasValor.find((c) => c.tcr === 100); // Marrón = 100 ppm/K
+                  // 1️⃣ Tolerancia manual
+                  const selTolManual =
+                    document.getElementById("toleranciaManual");
+                  const valorTol = selTolManual ? selTolManual.value : null;
+                  cTol = coloresBandasValor.find(
+                    (c) => c.nombre === (valorTol || "Dorado")
+                  );
+
+                  // 2️⃣ Solo para 6 bandas → usar PPM elegido por el usuario
+                  if (n === 6) {
+                    const selPpmManual = document.getElementById("ppmManual");
+                    const valorPpm = selPpmManual ? selPpmManual.value : null;
+                    cTcr = coloresBandasValor.find(
+                      (c) => c.nombre === valorPpm
+                    );
                   }
 
                   // 🔹 Crear arreglo de bandas
@@ -2243,6 +2354,8 @@
         tolFinal = null,
         tcrFinal = null;
 
+      // fondos de color para selects //
+
       // ==== Cambiar cantidad de bandas ====
 
       function setBandas(n) {
@@ -2258,9 +2371,108 @@
 
       // ==== Generar los selects dinámicamente ====
 
+      // function generarSelectores() {
+      //   const cont = document.getElementById("selectores");
+      //   cont.innerHTML = "";
+      //   const etiquetas = {
+      //     4: [
+      //       "1.ª banda de color",
+      //       "2.ª banda de color",
+      //       "Multiplicador",
+      //       "Tolerancia",
+      //     ],
+      //     5: [
+      //       "1.ª banda de color",
+      //       "2.ª banda de color",
+      //       "3.ª banda de color",
+      //       "Multiplicador",
+      //       "Tolerancia",
+      //     ],
+      //     6: [
+      //       "1.ª banda de color",
+      //       "2.ª banda de color",
+      //       "3.ª banda de color",
+      //       "Multiplicador",
+      //       "Tolerancia",
+      //       "Coeficiente TCR",
+      //     ],
+      //   };
+
+      //   etiquetas[cantBandas].forEach((text, i) => {
+      //     const l = document.createElement("label");
+      //     l.textContent = text;
+      //     const s = document.createElement("select");
+      //     s.id = "b" + (i + 1);
+
+      //     // === Determinar tipo de banda según posición y cantidad ===
+      //     let tipo = "";
+      //     if (cantBandas === 4) tipo = ["valor", "valor", "mult", "tol"][i];
+      //     else if (cantBandas === 5)
+      //       tipo = ["valor", "valor", "valor", "mult", "tol"][i];
+      //     else if (cantBandas === 6)
+      //       tipo = ["valor", "valor", "valor", "mult", "tol", "tcr"][i];
+
+      //     // === Función para formatear el multiplicador ===
+      //     const formatMult = (m) => {
+      //       if (m >= 1e9) return "×1G";
+      //       if (m >= 1e6) return `×${m / 1e6}M`;
+      //       if (m >= 1e3) return `×${m / 1e3}k`;
+      //       if (m < 1 && m >= 0.001) return `×${m * 1000}m`;
+      //       if (m < 0.001 && m >= 0.000001) return `×${m * 1e6}µ`;
+      //       return "×" + m;
+      //     };
+
+      //     // === Construcción de opciones ===
+      //     let opciones = `<option value="" disabled selected hidden>Seleccione un color</option>`;
+
+      //     if (tipo === "valor") {
+      //       opciones += coloresBandasValor
+      //         .filter((c) => c.valor !== null)
+      //         .map(
+      //           (c) =>
+      //             `<option value="${c.nombre}">${c.nombre} (${c.valor})</option>`
+      //         )
+      //         .join("");
+      //     } else if (tipo === "mult") {
+      //       opciones += coloresBandasValor
+      //         .filter((c) => c.mult !== null)
+      //         .map(
+      //           (c) =>
+      //             `<option value="${c.nombre}">${c.nombre} (${formatMult(
+      //               c.mult
+      //             )})</option>`
+      //         )
+      //         .join("");
+      //     } else if (tipo === "tol") {
+      //       opciones += coloresBandasValor
+      //         .filter((c) => c.tol !== null)
+      //         .map(
+      //           (c) =>
+      //             `<option value="${c.nombre}">${c.nombre} (±${c.tol}%)</option>`
+      //         )
+      //         .join("");
+      //     } else if (tipo === "tcr") {
+      //       opciones += coloresBandasValor
+      //         .filter((c) => c.tcr !== null)
+      //         .map(
+      //           (c) =>
+      //             `<option value="${c.nombre}">${c.nombre} (${c.tcr} ppm/K)</option>`
+      //         )
+      //         .join("");
+      //     }
+
+      //     s.innerHTML = opciones;
+      //     s.onchange = actualizarResistencia;
+
+      //     cont.appendChild(l);
+      //     cont.appendChild(s);
+      //   });
+      // }
+
       function generarSelectores() {
         const cont = document.getElementById("selectores");
         cont.innerHTML = "";
+
         const etiquetas = {
           4: [
             "1.ª banda de color",
@@ -2285,75 +2497,57 @@
           ],
         };
 
-        etiquetas[cantBandas].forEach((text, i) => {
-          const l = document.createElement("label");
-          l.textContent = text;
-          const s = document.createElement("select");
-          s.id = "b" + (i + 1);
+        const cantBandas = parseInt(
+          document.getElementById("bandasSelectorValor").value
+        );
+        const listaEtiquetas = etiquetas[cantBandas];
 
-          // === Determinar tipo de banda según posición y cantidad ===
-          let tipo = "";
-          if (cantBandas === 4) tipo = ["valor", "valor", "mult", "tol"][i];
-          else if (cantBandas === 5)
-            tipo = ["valor", "valor", "valor", "mult", "tol"][i];
-          else if (cantBandas === 6)
-            tipo = ["valor", "valor", "valor", "mult", "tol", "tcr"][i];
+        listaEtiquetas.forEach((et, i) => {
+          const div = document.createElement("div");
+          const label = document.createElement("label");
+          label.textContent = et;
 
-          // === Función para formatear el multiplicador ===
-          const formatMult = (m) => {
-            if (m >= 1e9) return "×1G";
-            if (m >= 1e6) return `×${m / 1e6}M`;
-            if (m >= 1e3) return `×${m / 1e3}k`;
-            if (m < 1 && m >= 0.001) return `×${m * 1000}m`;
-            if (m < 0.001 && m >= 0.000001) return `×${m * 1e6}µ`;
-            return "×" + m;
-          };
+          const select = document.createElement("select");
+          select.id = "b" + (i + 1);
 
-          // === Construcción de opciones ===
-          let opciones = `<option value="" disabled selected hidden>Seleccione un color</option>`;
-
-          if (tipo === "valor") {
-            opciones += coloresBandasValor
-              .filter((c) => c.valor !== null)
-              .map(
-                (c) =>
-                  `<option value="${c.nombre}">${c.nombre} (${c.valor})</option>`
-              )
-              .join("");
-          } else if (tipo === "mult") {
-            opciones += coloresBandasValor
-              .filter((c) => c.mult !== null)
-              .map(
-                (c) =>
-                  `<option value="${c.nombre}">${c.nombre} (${formatMult(
-                    c.mult
-                  )})</option>`
-              )
-              .join("");
-          } else if (tipo === "tol") {
-            opciones += coloresBandasValor
-              .filter((c) => c.tol !== null)
-              .map(
-                (c) =>
-                  `<option value="${c.nombre}">${c.nombre} (±${c.tol}%)</option>`
-              )
-              .join("");
-          } else if (tipo === "tcr") {
-            opciones += coloresBandasValor
-              .filter((c) => c.tcr !== null)
-              .map(
-                (c) =>
-                  `<option value="${c.nombre}">${c.nombre} (${c.tcr} ppm/K)</option>`
-              )
-              .join("");
+          let lista = [];
+          if (et.includes("Multiplicador")) {
+            lista = coloresBandasValor.filter((c) => c.mult);
+          } else if (et.includes("Tolerancia")) {
+            lista = coloresBandasValor.filter((c) => c.tol !== null);
+          } else if (et.includes("TCR")) {
+            lista = coloresBandasValor.filter((c) => c.tcr !== null);
+          } else {
+            lista = coloresBandasValor.filter((c) => c.valor !== null);
           }
 
-          s.innerHTML = opciones;
-          s.onchange = actualizarResistencia;
+          lista.forEach((c) => {
+            const opt = document.createElement("option");
+            opt.value = c.nombre;
+            opt.textContent = c.nombre;
+            opt.style.backgroundColor = c.hex;
+            opt.style.color = getContraste(c.hex);
+            select.appendChild(opt);
+          });
 
-          cont.appendChild(l);
-          cont.appendChild(s);
+          div.appendChild(label);
+          div.appendChild(select);
+          cont.appendChild(div);
         });
+      }
+
+      // === Función auxiliar para contraste de texto ===
+      function getContraste(hex) {
+        // Si es blanco puro, texto negro fijo
+        if (hex.toLowerCase() === "#fff" || hex.toLowerCase() === "#ffffff") {
+          return "#000";
+        }
+
+        const r = parseInt(hex.substr(1, 2), 16);
+        const g = parseInt(hex.substr(3, 2), 16);
+        const b = parseInt(hex.substr(5, 2), 16);
+        const brillo = (r * 299 + g * 587 + b * 114) / 1000;
+        return brillo > 140 ? "#000" : "#fff";
       }
 
       // ==== Dibujar el resistor ====
@@ -2534,7 +2728,8 @@
 
         // Calcular dígitos significativos
 
-        const digitos = Math.round(v / mult);
+        const digitos = Math.floor(v / mult);
+
         const d1 = Math.floor(digitos / (cantBandas > 4 ? 100 : 10)) % 10;
         const d2 = Math.floor(digitos / (cantBandas > 4 ? 10 : 1)) % 10;
         const d3 = cantBandas > 4 ? digitos % 10 : null;
@@ -2593,6 +2788,17 @@
       function actualizarUnidad() {
         calcularBandasDesdeValor();
       }
+      // ==== Cambiar unidad manualmente ====
+      function actualizarUnidad() {
+        calcularBandasDesdeValor();
+      }
+
+      // === Escuchar cambios en el selector de tolerancia ===
+      document
+        .getElementById("toleranciaManual")
+        .addEventListener("change", () => {
+          calcularBandasDesdeValor();
+        });
 
       // ==== Reset ====
 
